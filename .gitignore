@@ -1,0 +1,14 @@
+#JUCE generated content
+Builds
+BinaryData.h
+BinaryData*.cpp
+JuceLibraryCode
+
+#Windows Temp Cache Files
+[Tt]humbs.db
+
+#macOS Finder and whatnot
+.DS_Store
+*.DS_Store
+*.swp
+*~
