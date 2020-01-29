@@ -21,7 +21,7 @@ public:
         C1.reset (new Capacitor (5.0e-8, sampleRate));
         C2.reset (new Capacitor (5.0e-8, sampleRate));
 
-        Vs.reset(new IdealVoltageSource());
+        Vs.reset(new IdealVoltageSource);
 
         S1.reset (new WDFSeries (R2.get(), C2.get()));
         P1.reset (new WDFParallel (C1.get(), S1.get()));
@@ -56,9 +56,9 @@ public:
 private:
     std::unique_ptr<Resistor> R1;
     std::unique_ptr<Resistor> R2;
-    std::unique_ptr<Capacitor> C1; // root
+    std::unique_ptr<Capacitor> C1;
     std::unique_ptr<Capacitor> C2;
-    std::unique_ptr<IdealVoltageSource> Vs;
+    std::unique_ptr<IdealVoltageSource> Vs; // root
 
     std::unique_ptr<WDFSeries> S1;
     std::unique_ptr<WDFSeries> S2;

@@ -233,7 +233,11 @@ public:
     Open():
         WDFNode ("Open")
     {}
-    virtual ~Open() {}
+    virtual ~Open()
+    {
+        R = 1.0e15;
+        G = 1.0 / R;
+    }
 
     inline void calcImpedance() override {}
 
@@ -256,7 +260,11 @@ public:
     Short():
         WDFNode ("Short")
     {}
-    virtual ~Short() {}
+    virtual ~Short()
+    {
+        R = 1.0e-15;
+        G = 1.0 / R;
+    }
 
     inline void calcImpedance() override {}
 
@@ -351,8 +359,8 @@ public:
 
     inline void incident (double x) override
     {
-        port1->incident(port1->b - (port1->G/G) * (x + port1->b + port2->b));
-        port2->incident(port2->b - (port2->G/G) * (x + port1->b + port2->b));
+        port1->incident (x + (port2->b - port1->b) * (port2->G/G));
+        port2->incident (x + (port2->b - port1->b) * (-port1->G/G));
         a = x;
     }
 
