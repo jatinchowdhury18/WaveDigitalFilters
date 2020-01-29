@@ -16,6 +16,7 @@ env:
   - PLUGIN=VoltageDivider
   - PLUGIN=PassiveLPF
   - PLUGIN=LCOscillator
+  - PLUGIN=DiodeClipper
 
 stages:
   - name: addons

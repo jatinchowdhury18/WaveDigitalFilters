@@ -1,5 +1,7 @@
 # Wave Digital Filters
 
+[![Build Status](https://travis-ci.com/jatinchowdhury18/WaveDigitalFilters.svg?token=Ub9niJrqG1Br1qaaxp7E&branch=master)](https://travis-ci.com/jatinchowdhury18/WaveDigitalFilters)
+
 This repository contains code for real-time implementations
 of virtual analog circuit models using wave digital filters.
 
