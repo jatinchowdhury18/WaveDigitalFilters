@@ -20,7 +20,10 @@
  * THE SOFTWARE.
  */
 
-float log2f_approx(float x) {
+#ifndef OMEGA_H_INCLUDED
+#define OMEGA_H_INCLUDED
+
+inline float log2f_approx(float x) {
 	union {
 		int	i;
 		float	f;
@@ -32,11 +35,11 @@ float log2f_approx(float x) {
 	return (float)e - 2.213475204444817f + v.f * (3.148297929334117f + v.f * (-1.098865286222744f + v.f * 0.1640425613334452f));
 }
 
-float logf_approx(float x) {
+inline float logf_approx(float x) {
 	return 0.693147180559945f * log2f_approx(x);
 }
 
-float pow2f_approx(float x) {
+inline float pow2f_approx(float x) {
 	if (x < -126.f)
 		return 0.f;
 	union {
@@ -50,15 +53,15 @@ float pow2f_approx(float x) {
 	return v.f * (1.0f + f * (0.6931471805599453f + f * (0.2274112777602189f + f * 0.07944154167983575f)));
 }
 
-float expf_approx(float x) {
+inline float expf_approx(float x) {
 	return pow2f_approx(1.442695040888963f * x);
 }
 
-float omega1(float x) {
+inline float omega1(float x) {
 	return x > 0.f ? x : 0.f;
 }
 
-float omega2(float x) {
+inline float omega2(float x) {
 	const float x1 = -3.684303659906469f;
 	const float x2 = 1.972967391708859f;
 	const float a = 9.451797158780131e-3f;
@@ -68,7 +71,7 @@ float omega2(float x) {
 	return x < x1 ? 0.f : (x > x2 ? x : d + x * (c + x * (b + x * a)));
 }
 
-float omega3(float x) {
+inline float omega3(float x) {
 	const float x1 = -3.341459552768620f;
 	const float x2 = 8.f;
 	const float a = -1.314293149877800e-3f;
@@ -78,7 +81,9 @@ float omega3(float x) {
 	return x < x1 ? 0.f : (x < x2 ? d + x * (c + x * (b + x * a)) : x - logf_approx(x));
 }
 
-float omega4(float x) {
+inline float omega4(float x) {
 	const float y = omega3(x);
 	return y - (y - expf_approx(x - y)) / (y + 1.f);
 }
+
+#endif //OMEGA_H_INCLUDED
