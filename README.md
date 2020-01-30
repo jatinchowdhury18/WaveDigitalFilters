@@ -48,3 +48,10 @@ Wave Digital Filters", PhD. Dissertation, Stanford University, 2016,
 of Cascaded Vacuum Tube Amplifiers Using Modified Blockwise Method",
 Proc. of the 21st International Conference on Digital Audio Effects,
 2018, [link](https://www.dafx.de/paper-archive/2018/papers/DAFx2018_paper_25.pdf).
+
+## Licensing
+
+The code in this repository belongs to Jatin Chowdhury, except the
+implementation of the Wright-Omega function approximations (`shared/omega.h`)
+which belongs to Stefano D'Angelo. More licensing details are
+still being worked out.
