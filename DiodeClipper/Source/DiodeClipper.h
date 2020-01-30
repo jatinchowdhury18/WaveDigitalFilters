@@ -40,6 +40,12 @@ public:
         R1->setResistanceValue (Res);
     }
 
+    void setCircuitElements (float res, float cap)
+    {
+        C1->setCapacitanceValue ((double) cap);
+        R1->setResistanceValue ((double) res);
+    }
+
     inline float processSample (float x)
     {
         Vs->setVoltage ((double) x);
