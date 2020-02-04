@@ -25,8 +25,9 @@ DiodeClipperAudioProcessor::DiodeClipperAudioProcessor()
     vts (*this, nullptr, Identifier ("Parameters"), createParameterLayout()),
     oversampling (2, 1, dsp::Oversampling<float>::filterHalfBandPolyphaseIIR)
 {
-    freqParam = vts.getRawParameterValue ("fc");
+    freqParam   = vts.getRawParameterValue ("fc");
     gainDBParam = vts.getRawParameterValue ("gain");
+    outDBParam  = vts.getRawParameterValue ("out");
 }
 
 DiodeClipperAudioProcessor::~DiodeClipperAudioProcessor()
@@ -40,8 +41,9 @@ AudioProcessorValueTreeState::ParameterLayout DiodeClipperAudioProcessor::create
     NormalisableRange<float> fcRange (20.0f, 20000.0f);
     fcRange.setSkewForCentre (1000.0f);
 
-    params.push_back (std::make_unique<AudioParameterFloat> ("fc", "Cutoff [Hz]", fcRange, 1000.0f));
+    params.push_back (std::make_unique<AudioParameterFloat> ("fc",   "Cutoff [Hz]", fcRange, 1000.0f));
     params.push_back (std::make_unique<AudioParameterFloat> ("gain", "Gain [dB]", 0.0f, 30.0f, 0.0f));
+    params.push_back (std::make_unique<AudioParameterFloat> ("out",  "Out Gain [dB]", -30.f, 30.0f, 0.0f));
 
     return { params.begin(), params.end() };
 }
@@ -118,6 +120,9 @@ void DiodeClipperAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
 
     curGain = Decibels::decibelsToGain (*gainDBParam);
     oldGain = curGain;
+
+    curOutGain = Decibels::decibelsToGain (*outDBParam);
+    oldOutGain = curOutGain;
 }
 
 void DiodeClipperAudioProcessor::releaseResources()
@@ -153,6 +158,7 @@ void DiodeClipperAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 {
     ScopedNoDenormals noDenormals;
     
+    // Input gain stage
     curGain = Decibels::decibelsToGain (*gainDBParam);
 
     if (oldGain == curGain)
@@ -165,6 +171,7 @@ void DiodeClipperAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
         oldGain = curGain;
     }
 
+    // WDF
     dsp::AudioBlock<float> block (buffer);
     dsp::AudioBlock<float> osBlock (buffer);
 
@@ -183,6 +190,19 @@ void DiodeClipperAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
     }
 
     oversampling.processSamplesDown (block);
+
+    // Output gain stage
+    curOutGain = Decibels::decibelsToGain (*outDBParam);
+
+    if (oldOutGain == curOutGain)
+    {
+        buffer.applyGain (curOutGain);
+    }
+    else
+    {
+        buffer.applyGainRamp (0, buffer.getNumSamples(), oldOutGain, curOutGain);
+        oldOutGain = curOutGain;
+    }
 }
 
 //==============================================================================

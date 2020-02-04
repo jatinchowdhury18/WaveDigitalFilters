@@ -56,7 +56,7 @@ public:
         // See Werner et al., "An Improved and Generalized Diode Clipper Model for Wave Digital Filters"
         // https://www.researchgate.net/publication/299514713_An_Improved_and_Generalized_Diode_Clipper_Model_for_Wave_Digital_Filters
         double lambda = (double) signum (a);
-        double b = a + 2 * lambda * (P1->R * Is - Vt * omega4 (log (P1->R * Is / Vt) + (lambda * a + P1->R * Is) / Vt));
+        double b = a + 2 * lambda * (P1->R * Is - Vt * omega4 (float (log (P1->R * Is / Vt) + (lambda * a + P1->R * Is) / Vt)));
 
         y = C1->voltage();
 

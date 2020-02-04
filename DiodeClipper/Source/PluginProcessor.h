@@ -59,8 +59,14 @@ public:
 private:
     float* freqParam = nullptr;
     float* gainDBParam = nullptr;
+    float* outDBParam = nullptr;
+    
     float curGain = 1.0f;
     float oldGain = 1.0f;
+
+    float curOutGain = 1.0f;
+    float oldOutGain = 1.0f;
+
     AudioProcessorValueTreeState vts;
     static AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
