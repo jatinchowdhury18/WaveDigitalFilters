@@ -60,6 +60,7 @@ private:
     float* freqParam = nullptr;
     float* gainDBParam = nullptr;
     float* outDBParam = nullptr;
+    float* capLeakParam = nullptr;
     
     float curGain = 1.0f;
     float oldGain = 1.0f;

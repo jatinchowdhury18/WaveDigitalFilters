@@ -23,7 +23,7 @@ public:
 
         Vs.reset (new ResistiveVoltageSource);
         R1.reset (new Resistor (Res));
-        C1.reset (new Capacitor (Cap, sampleRate));
+        C1.reset (new LeakyCapacitor (Cap, sampleRate));
 
         S1.reset (new  WDFSeries (Vs.get(), R1.get()));
         P1.reset (new WDFParallel (S1.get(), C1.get()));
@@ -31,19 +31,22 @@ public:
         setCircuitParams (cutoff);
     }
 
-    void setCircuitParams (double cutoff)
+    void setCircuitParams (double cutoff, double rPar = 100e6)
     {
         double Cap = 47.0e-9;
         double Res = 1.0 / (MathConstants<double>::twoPi * cutoff * Cap);
 
         C1->setCapacitanceValue (Cap);
         R1->setResistanceValue (Res);
+
+        C1->setParallelResistance (rPar);
     }
 
-    void setCircuitElements (float res, float cap)
+    void setCircuitElements (float res, float cap, double rPar = 100e6)
     {
         C1->setCapacitanceValue ((double) cap);
         R1->setResistanceValue ((double) res);
+        C1->setParallelResistance (rPar);
     }
 
     inline float processSample (float x)
@@ -68,7 +71,7 @@ public:
 private:
     std::unique_ptr<ResistiveVoltageSource> Vs;
     std::unique_ptr<Resistor> R1;
-    std::unique_ptr<Capacitor> C1;
+    std::unique_ptr<LeakyCapacitor> C1;
     
     std::unique_ptr<WDFSeries> S1;
     std::unique_ptr<WDFParallel> P1;

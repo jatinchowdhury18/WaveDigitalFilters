@@ -25,9 +25,10 @@ DiodeClipperAudioProcessor::DiodeClipperAudioProcessor()
     vts (*this, nullptr, Identifier ("Parameters"), createParameterLayout()),
     oversampling (2, 1, dsp::Oversampling<float>::filterHalfBandPolyphaseIIR)
 {
-    freqParam   = vts.getRawParameterValue ("fc");
-    gainDBParam = vts.getRawParameterValue ("gain");
-    outDBParam  = vts.getRawParameterValue ("out");
+    freqParam    = vts.getRawParameterValue ("fc");
+    gainDBParam  = vts.getRawParameterValue ("gain");
+    outDBParam   = vts.getRawParameterValue ("out");
+    capLeakParam = vts.getRawParameterValue ("leak");
 }
 
 DiodeClipperAudioProcessor::~DiodeClipperAudioProcessor()
@@ -44,6 +45,7 @@ AudioProcessorValueTreeState::ParameterLayout DiodeClipperAudioProcessor::create
     params.push_back (std::make_unique<AudioParameterFloat> ("fc",   "Cutoff [Hz]", fcRange, 1000.0f));
     params.push_back (std::make_unique<AudioParameterFloat> ("gain", "Gain [dB]", 0.0f, 30.0f, 0.0f));
     params.push_back (std::make_unique<AudioParameterFloat> ("out",  "Out Gain [dB]", -30.f, 30.0f, 0.0f));
+    params.push_back (std::make_unique<AudioParameterFloat> ("leak", "Cap Leakage", 0.0f, 1.0f, 0.0f));
 
     return { params.begin(), params.end() };
 }
@@ -172,6 +174,8 @@ void DiodeClipperAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
     }
 
     // WDF
+    auto rParallel = 100.0e6 * pow (1.0 - *capLeakParam, 0.5) + 1e3;
+
     dsp::AudioBlock<float> block (buffer);
     dsp::AudioBlock<float> osBlock (buffer);
 
@@ -182,7 +186,7 @@ void DiodeClipperAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 
     for (int ch = 0; ch < osBuffer.getNumChannels(); ++ch)
     {
-        diodeClipper[ch].setCircuitParams ((double) *freqParam);
+        diodeClipper[ch].setCircuitParams ((double) *freqParam, rParallel);
         auto* x = osBuffer.getWritePointer (ch);
 
         for (int n = 0; n < osBuffer.getNumSamples(); ++n)

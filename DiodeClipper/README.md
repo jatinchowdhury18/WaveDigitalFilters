@@ -1,6 +1,6 @@
 # Diode Clipper
 
-RC diode clipper with anti-parallel diodes
+RC diode clipper with anti-parallel diodes (and an optionally leaky capacitor)
 
 ![](./schem.png)
 

@@ -466,6 +466,34 @@ private:
     double Vs;
 };
 
+/** WDF Leaky Capacitor Node */
+class LeakyCapacitor : public WDFParallel
+{
+public:
+    LeakyCapacitor (double value, double fs) :
+        C (value, fs),
+        Rp (100e6),
+        WDFParallel (&C, &Rp)
+    {
+        calcImpedance();
+    }
+    virtual ~LeakyCapacitor() {}
+
+    void setCapacitanceValue (double newC)
+    {
+        C.setCapacitanceValue (newC);
+    }
+
+    void setParallelResistance (double newR)
+    {
+        Rp.setResistanceValue (newR);
+    }
+
+private:
+    Capacitor C;
+    Resistor Rp;
+};
+
 }
 
 #endif // WDF_H_INCLUDED
