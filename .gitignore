@@ -12,3 +12,5 @@ JuceLibraryCode
 *.DS_Store
 *.swp
 *~
+
+.vscode

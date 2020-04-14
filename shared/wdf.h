@@ -466,6 +466,39 @@ private:
     double Vs;
 };
 
+/** WDF Current source with 1 pOhm resistance */
+class ResistiveCurrentSource : public WDFNode
+{
+public:
+    ResistiveCurrentSource() : WDFNode ("Resistive Voltage")
+    {
+        calcImpedance();
+    }
+    virtual ~ResistiveCurrentSource() {}
+
+    inline void calcImpedance()
+    {
+        R = 1.0e9;
+        G = 1.0 / R;
+    }
+
+    void setCurrent (double newI) { Is = newI; }
+
+    inline void incident (double x) override
+    {
+        a = x;
+    }
+
+    inline double reflected() override
+    {
+        b = 2 * R * Is;
+        return b;
+    }
+
+private:
+    double Is;
+};
+
 /** WDF Leaky Capacitor Node */
 class LeakyCapacitor : public WDFParallel
 {

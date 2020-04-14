@@ -14,6 +14,7 @@ os:
   - linux
 env:
   - PLUGIN=VoltageDivider
+  - PLUGIN=CurrentDivider
   - PLUGIN=PassiveLPF
   - PLUGIN=LCOscillator
   - PLUGIN=DiodeClipper
