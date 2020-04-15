@@ -1,5 +1,7 @@
 #include "TR808OutputFilter.h"
-
+#include <cmath> // pow()
+#include <algorithm> // clamp()
+ 
 void OutputFilter::reset (double sampleRate)
 {
     inv1 = std::make_unique<PolarityInverter> (&Vbtr);
@@ -43,9 +45,7 @@ void OutputFilter::reset (double sampleRate)
 void OutputFilter::setVolume (float vol)
 {
     // log taper potentiometer (rough approximation)
-    double l = pow ((double) vol, 2);
-    if (l < 0.001)
-        l = 0.001;
+    double l = std::clamp (pow ((double) vol, 2), 0.001, 0.999);
 
     vr4.setResistanceValue ((1.0 - l) * 100000.0);
     vr4neg.setResistanceValue (l * 100000.0);
@@ -54,6 +54,6 @@ void OutputFilter::setVolume (float vol)
 void OutputFilter::setTone (float tone)
 {
     // anti-log taper potentiometer (rough approximation)
-    double c = pow ((double) tone, 0.5);
+    double c = std::clamp (pow ((double) tone, 0.5), 0.001, 0.999);
     vr5.setResistanceValue ((1.0 - c) * 10000.0);
 }

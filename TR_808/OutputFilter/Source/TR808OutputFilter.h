@@ -2,6 +2,7 @@
 #define TR808OUTPUTFILTER_H_INCLUDED
 
 #include "wdf.h"
+#include <memory>
 
 using namespace WaveDigitalFilter;
 
