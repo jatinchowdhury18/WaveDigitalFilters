@@ -403,19 +403,30 @@ private:
     
 };
 
-/** WDF Voltage source with 1 pOhm resistance */
+/** WDF Voltage source with resistance */
 class ResistiveVoltageSource : public WDFNode
 {
 public:
-    ResistiveVoltageSource() : WDFNode ("Resistive Voltage")
+    ResistiveVoltageSource (double value = 1.0e-9) :
+        WDFNode ("Resistive Voltage"),
+        R_value (value)
     {
         calcImpedance();
     }
     virtual ~ResistiveVoltageSource() {}
 
+    void setResistanceValue (double newR)
+    {
+        if (newR == R_value)
+            return;
+
+        R_value = newR;
+        propagateImpedance();
+    }
+
     inline void calcImpedance()
     {
-        R = 1.0e-9;
+        R = R_value;
         G = 1.0 / R;
     }
 
@@ -434,6 +445,7 @@ public:
 
 private:
     double Vs;
+    double R_value = 1.0e-9;
 };
 
 /** WDF Voltage source with 1 pOhm resistance */
@@ -466,15 +478,60 @@ private:
     double Vs;
 };
 
-/** WDF Current source with 1 pOhm resistance */
+/** WDF Current source with resistance */
 class ResistiveCurrentSource : public WDFNode
 {
 public:
-    ResistiveCurrentSource() : WDFNode ("Resistive Voltage")
+    ResistiveCurrentSource (double value=1.0e9) :
+        WDFNode ("Resistive Current"),
+        R_value (value)
     {
         calcImpedance();
     }
     virtual ~ResistiveCurrentSource() {}
+
+    void setResistanceValue (double newR)
+    {
+        if (newR == R_value)
+            return;
+
+        R_value = newR;
+        propagateImpedance();
+    }
+
+    inline void calcImpedance()
+    {
+        R = R_value;
+        G = 1.0 / R;
+    }
+
+    void setCurrent (double newI) { Is = newI; }
+
+    inline void incident (double x) override
+    {
+        a = x;
+    }
+
+    inline double reflected() override
+    {
+        b = 2 * R * Is;
+        return b;
+    }
+
+private:
+    double Is;
+    double R_value = 1.0e9;
+};
+
+/** WDF Current source with 1 GOhm resistance */
+class IdealCurrentSource : public WDFNode
+{
+public:
+    IdealCurrentSource() : WDFNode ("Ideal Current")
+    {
+        calcImpedance();
+    }
+    virtual ~IdealCurrentSource() {}
 
     inline void calcImpedance()
     {
@@ -491,7 +548,7 @@ public:
 
     inline double reflected() override
     {
-        b = 2 * R * Is;
+        b = 2 * next->R * Is + a;
         return b;
     }
 

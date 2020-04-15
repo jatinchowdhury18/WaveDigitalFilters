@@ -10,11 +10,15 @@ class CurrentDivider
 public:
     CurrentDivider()
     {
-        F1 = std::make_unique<PolarityInverter> (&Is);
-        P1 = std::make_unique<WDFParallel> (F1.get(), &R1);
-        P2 = std::make_unique<WDFParallel> (P1.get(), &R2);
-        
-        O1.connectToNode (P2.get());
+        P1 = std::make_unique<WDFParallel> (&R1, &R2);
+        F1 = std::make_unique<PolarityInverter> (P1.get());
+        Is.connectToNode (F1.get());
+
+        // F1 = std::make_unique<PolarityInverter> (&Is);
+        // P1 = std::make_unique<WDFParallel> (F1.get(), &R1);
+        // P2 = std::make_unique<WDFParallel> (P1.get(), &R2);
+        // 
+        // O1.connectToNode (P2.get());
     }
 
     void setResistorValues (float r1, float r2)
@@ -27,8 +31,8 @@ public:
     {
         Is.setCurrent ((double) x);
 
-        O1.incident (P2->reflected());
-        P2->incident (O1.reflected());
+        Is.incident (F1->reflected());
+        F1->incident (Is.reflected());
         float y = R1.current();
 
         return y;
@@ -38,10 +42,10 @@ private:
     Resistor R1 { 10000.0 };
     Resistor R2 { 10000.0 };
     std::unique_ptr<PolarityInverter> F1;
-    ResistiveCurrentSource Is;
+    IdealCurrentSource Is;
     std::unique_ptr<WDFParallel> P1;
     std::unique_ptr<WDFParallel> P2;
-    Open O1;
+    // Open O1;
 };
 
 #endif // CURRENTDIVIDER_H_INCLUDED
