@@ -13,12 +13,6 @@ public:
         P1 = std::make_unique<WDFParallel> (&R1, &R2);
         F1 = std::make_unique<PolarityInverter> (P1.get());
         Is.connectToNode (F1.get());
-
-        // F1 = std::make_unique<PolarityInverter> (&Is);
-        // P1 = std::make_unique<WDFParallel> (F1.get(), &R1);
-        // P2 = std::make_unique<WDFParallel> (P1.get(), &R2);
-        // 
-        // O1.connectToNode (P2.get());
     }
 
     void setResistorValues (float r1, float r2)
@@ -45,7 +39,6 @@ private:
     IdealCurrentSource Is;
     std::unique_ptr<WDFParallel> P1;
     std::unique_ptr<WDFParallel> P2;
-    // Open O1;
 };
 
 #endif // CURRENTDIVIDER_H_INCLUDED

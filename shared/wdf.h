@@ -315,6 +315,60 @@ private:
     WDFNode* port1;
 };
 
+/** WDF y-parameter 2-port (short circuit admittance) */
+class YParameter : public WDFNode
+{
+public:
+    YParameter (WDFNode* port1, double y11, double y12, double y21, double y22) :
+        WDFNode ("YParameter"),
+        port1 (port1)
+    {
+        y[0][0] = y11; y[0][1] = y12;
+        y[1][0] = y21; y[1][1] = y22;
+
+        port1->connectToNode (this);
+        calcImpedance();
+    }
+
+    virtual ~YParameter() {}
+
+    inline void calcImpedance() override
+    {
+        denominator = y[1][1] + port1->R * y[0][0] * y[1][1] - port1->R * y[0][1] * y[1][0];
+        R = (port1->R * y[0][0] + 1.0) / denominator;
+        G = 1.0 / R;
+
+        double rSq = port1->R * port1->R;
+        double num1A = -y[1][1] * rSq * y[0][0] * y[0][0];
+        double num2A = y[0][1] * y[1][0] * rSq * y[0][0];
+
+        A = (num1A + num2A + y[1][1]) / (denominator * (port1->R * y[0][0] + 1.0));
+        B = -port1->R * y[0][1] / (port1->R * y[0][0] + 1.0);
+        C = -y[1][0] / denominator;
+    }
+
+    inline void incident (double x) override
+    {
+        a = x;
+        port1->incident(A * port1->b + B * x);
+    }
+
+    inline double reflected() override
+    {
+        b = C * port1->reflected();
+        return b;
+    }
+
+private:
+    WDFNode* port1;
+    double y[2][2] = {{ 0.0, 0.0 }, { 0.0, 0.0 }};
+    
+    double denominator = 1.0;
+    double A = 1.0f;
+    double B = 1.0f;
+    double C = 1.0f;
+};
+
 /** WDF 3-port adapter base class */
 class WDFAdaptor : public WDFNode
 {

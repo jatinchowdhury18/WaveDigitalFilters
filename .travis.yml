@@ -18,6 +18,7 @@ env:
   - PLUGIN=PassiveLPF
   - PLUGIN=LCOscillator
   - PLUGIN=DiodeClipper
+  - PLUGIN=TR_808/OutputFilter
 
 stages:
   - name: addons
@@ -86,12 +87,12 @@ script:
   - export PROJUCER=$PROJUCER_EXPORT
   - $PROJUCER --set-global-search-path $TRAVIS_OS_NAME defaultJuceModulePath  $TRAVIS_BUILD_DIR/JUCE/modules
   - $PROJUCER --set-global-search-path $TRAVIS_OS_NAME vstLegacyPath $TRAVIS_BUILD_DIR/JUCE/VST2_SDK
-  - $PROJUCER --resave $PLUGIN.jucer
+  - $PROJUCER --resave ${PLUGIN##*/}.jucer
   - cd Builds/$BUILD_FOLDER/
 
-  - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then xcodebuild -project $PLUGIN.xcodeproj/ clean; fi
-  - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then xcodebuild -project $PLUGIN.xcodeproj/ -configuration Release | xcpretty -s -f `xcpretty-travis-formatter`; fi
-  - if [[ $TRAVIS_OS_NAME == 'windows' ]]; then msbuild.exe -v:normal $PLUGIN.sln; fi
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then xcodebuild -project ${PLUGIN##*/}.xcodeproj/ clean; fi
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then xcodebuild -project ${PLUGIN##*/}.xcodeproj/ -configuration Release | xcpretty -s -f `xcpretty-travis-formatter`; fi
+  - if [[ $TRAVIS_OS_NAME == 'windows' ]]; then msbuild.exe -v:normal ${PLUGIN##*/}.sln; fi
   - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then make CONFIG=Release; fi
 
   # Pluginval
@@ -101,8 +102,8 @@ script:
       cd $TRAVIS_BUILD_DIR/
       curl -L "https://github.com/Tracktion/pluginval/releases/download/latest_release/pluginval_macOS.zip" -o pluginval.zip
       unzip pluginval
-      pluginval.app/Contents/MacOS/pluginval --strictness-level 8 --validate-in-process --validate "$TRAVIS_BUILD_DIR/$PLUGIN/Builds/MacOSX/build/Release/$PLUGIN.vst3" || exit 1
-      pluginval.app/Contents/MacOS/pluginval --strictness-level 8 --validate-in-process --validate "$TRAVIS_BUILD_DIR/$PLUGIN/Builds/MacOSX/build/Release/$PLUGIN.component" || exit 1
+      pluginval.app/Contents/MacOS/pluginval --strictness-level 8 --validate-in-process --validate "$TRAVIS_BUILD_DIR/$PLUGIN/Builds/MacOSX/build/Release/${PLUGIN##*/}.vst3" || exit 1
+      pluginval.app/Contents/MacOS/pluginval --strictness-level 8 --validate-in-process --validate "$TRAVIS_BUILD_DIR/$PLUGIN/Builds/MacOSX/build/Release/${PLUGIN##*/}.component" || exit 1
     fi
   - |
     if [[ $TRAVIS_OS_NAME == 'windows' ]]; then
@@ -110,13 +111,13 @@ script:
       cd $TRAVIS_BUILD_DIR/
       powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://github.com/Tracktion/pluginval/releases/download/latest_release/pluginval_Windows.zip -OutFile pluginval.zip"
       powershell -Command "Expand-Archive pluginval.zip -DestinationPath ."
-      ./pluginval.exe --strictness-level 8 --validate-in-process --validate "$TRAVIS_BUILD_DIR/$PLUGIN/Builds/VisualStudio2017/x64/Debug/VST3/$PLUGIN.vst3"
+      ./pluginval.exe --strictness-level 8 --validate-in-process --validate "$TRAVIS_BUILD_DIR/$PLUGIN/Builds/VisualStudio2017/x64/Debug/VST3/${PLUGIN##*/}.vst3"
     fi
   - |
     if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       curl -L "https://github.com/Tracktion/pluginval/releases/download/latest_release/pluginval_Linux.zip" -o pluginval.zip
       unzip pluginval
-      ./pluginval --strictness-level 8 --validate-in-process --validate "$TRAVIS_BUILD_DIR/$PLUGIN/Builds/LinuxMakefile/build/$PLUGIN.so" || exit 1
+      ./pluginval --strictness-level 8 --validate-in-process --validate "$TRAVIS_BUILD_DIR/$PLUGIN/Builds/LinuxMakefile/build/${PLUGIN##*/}.so" || exit 1
     fi
 
   - echo "SUCCESS"
