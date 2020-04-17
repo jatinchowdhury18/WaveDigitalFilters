@@ -19,6 +19,7 @@ env:
   - PLUGIN=LCOscillator
   - PLUGIN=DiodeClipper
   - PLUGIN=TR_808/OutputFilter
+  - PLUGIN=TR_808/PulseShaper
 
 stages:
   - name: addons
