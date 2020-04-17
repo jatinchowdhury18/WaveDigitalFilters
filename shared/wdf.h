@@ -3,6 +3,7 @@
 
 #include "omega.h"
 #include <string>
+#include <cmath>
 
 namespace WaveDigitalFilter
 {
