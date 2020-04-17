@@ -1,6 +1,7 @@
 #ifndef WDF_H_INCLUDED
 #define WDF_H_INCLUDED
 
+#include "omega.h"
 #include <string>
 
 namespace WaveDigitalFilter
@@ -109,10 +110,13 @@ private:
 class Capacitor : public WDFNode
 {
 public:
-    Capacitor (double value, double fs) :
+    Capacitor (double value, double fs, double alpha = 1.0) :
         WDFNode ("Capacitor"),
         C_value (value),
-        fs (fs)
+        fs (fs),
+        alpha (alpha),
+        b_coef ((1.0 - alpha) / 2.0),
+        a_coef ((1.0 + alpha) / 2.0)
     {
         calcImpedance();
     }
@@ -129,7 +133,7 @@ public:
 
     inline void calcImpedance() override
     {
-        R = 1.0 / (2.0 * C_value * fs);
+        R = 1.0 / ((1.0 + alpha) * C_value * fs);
         G = 1.0 / R;
     }
 
@@ -141,14 +145,19 @@ public:
 
     inline double reflected() override
     {
-        b = z;
+        b = b_coef * b + a_coef * z;
         return b;
     }
 
 private:
     double C_value = 1.0e-6;
     double z = 0.0;
+
     const double fs;
+    const double alpha;
+
+    const double b_coef;
+    const double a_coef;
 };
 
 
@@ -156,10 +165,13 @@ private:
 class Inductor : public WDFNode
 {
 public:
-    Inductor (double value, double fs) :
+    Inductor (double value, double fs, double alpha = 1.0) :
         WDFNode ("Inductor"),
         L_value (value),
-        fs (fs)
+        fs (fs),
+        alpha (alpha),
+        b_coef ((1.0 - alpha) / 2.0),
+        a_coef ((1.0 + alpha) / 2.0)
     {
         calcImpedance();
     }
@@ -176,7 +188,7 @@ public:
 
     inline void calcImpedance() override
     {
-        R = 2.0 * L_value * fs;
+        R = (1.0 + alpha) * L_value * fs;
         G = 1.0 / R;
     }
 
@@ -188,14 +200,19 @@ public:
 
     inline double reflected() override
     {
-        b = -z;
+        b = b_coef * b - a_coef * z;
         return b;
     }
 
 private:
     double L_value = 1.0e-6;
     double z = 0.0;
+
     const double fs;
+    const double alpha;
+
+    const double b_coef;
+    const double a_coef;
 };
 
 /** WDF Switch */
@@ -512,8 +529,7 @@ public:
     }
     virtual ~IdealVoltageSource() {}
 
-    inline void calcImpedance()
-    {}
+    inline void calcImpedance() {}
 
     void setVoltage (double newV) { Vs = newV; }
 
@@ -636,6 +652,73 @@ public:
 private:
     Capacitor C;
     Resistor Rp;
+};
+
+template <typename T> inline int signum (T val)
+{
+    return (T (0) < val) - (val < T (0));
+}
+
+/**
+ * Diode pair nonlinearity evaluated in the wave domain
+ * See Werner et al., "An Improved and Generalized Diode Clipper Model for Wave Digital Filters"
+ * https://www.researchgate.net/publication/299514713_An_Improved_and_Generalized_Diode_Clipper_Model_for_Wave_Digital_Filters
+ * */
+class DiodePair : public WDFNode
+{
+public:
+    DiodePair (double Is, double Vt) :
+        WDFNode ("DiodePair"),
+        Is (Is),
+        Vt (Vt)
+    {}
+
+    inline void calcImpedance() {}
+
+    inline void incident (double x) override
+    {
+        a = x;
+    }
+
+    inline double reflected() override
+    {
+        // See eqn (18) from reference paper
+        double lambda = (double) signum (a);
+        b = a + 2 * lambda * (next->R * Is - Vt * omega4 (float (log (next->R * Is / Vt) + (lambda * a + next->R * Is) / Vt)));
+        return b;
+    }
+
+private:
+    const double Is; // reverse saturation current
+    const double Vt; // thermal voltage
+};
+
+class Diode : public WDFNode
+{
+public:
+    Diode (double Is, double Vt) :
+        WDFNode ("Diode"),
+        Is (Is),
+        Vt (Vt)
+    {}
+
+    inline void calcImpedance() {}
+
+    inline void incident (double x) override
+    {
+        a = x;
+    }
+
+    inline double reflected() override
+    {
+        // See eqn (10) from reference paper
+        b = a + 2 * next->R * Is - 2 * Vt * omega4 (float (log (next->R * Is / Vt) + (a + next->R * Is) / Vt));
+        return b;
+    }
+
+private:
+    const double Is; // reverse saturation current
+    const double Vt; // thermal voltage
 };
 
 }

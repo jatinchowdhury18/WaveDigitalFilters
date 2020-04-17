@@ -2,7 +2,6 @@
 #define DIODECLIPPER_H_INCLUDED
 
 #include "wdf.h"
-#include "omega.h"
 
 using namespace WaveDigitalFilter;
 
@@ -27,6 +26,7 @@ public:
 
         S1.reset (new  WDFSeries (Vs.get(), R1.get()));
         P1.reset (new WDFParallel (S1.get(), C1.get()));
+        dp.connectToNode (P1.get());
         
         setCircuitParams (cutoff);
     }
@@ -53,17 +53,9 @@ public:
     {
         Vs->setVoltage ((double) x);
 
-        double a = P1->reflected();
-
-        // Evaluate diode clipper nonlinearity in the wave domain
-        // See Werner et al., "An Improved and Generalized Diode Clipper Model for Wave Digital Filters"
-        // https://www.researchgate.net/publication/299514713_An_Improved_and_Generalized_Diode_Clipper_Model_for_Wave_Digital_Filters
-        double lambda = (double) signum (a);
-        double b = a + 2 * lambda * (P1->R * Is - Vt * omega4 (float (log (P1->R * Is / Vt) + (lambda * a + P1->R * Is) / Vt)));
-
+        dp.incident (P1->reflected());
         y = C1->voltage();
-
-        P1->incident (b);
+        P1->incident (dp.reflected());
 
         return (float) y;
     }
@@ -77,9 +69,8 @@ private:
     std::unique_ptr<WDFParallel> P1;
     double y = 0.0;
 
-    // GZ34 diode
-    const double Vt = 0.02585; // Thermal voltage
-    const double Is = 2.52e-9; // reverse saturation current
+    // GZ34 diode pair
+    DiodePair dp { 2.52e-9, 0.02585 };
 };
 
 #endif //DIODECLIPPER_H_INCLUDED

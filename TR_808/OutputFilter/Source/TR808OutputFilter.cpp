@@ -34,7 +34,6 @@ void OutputFilter::reset (double sampleRate)
 
     inv4 = std::make_unique<PolarityInverter> (p7.get());
     I2.connectToNode (inv4.get());
-    // inv4->connectToNode (&I2);
 
     I1.setCurrent (-0.169104e-3);
     I2.setCurrent (50.9002e-3);
