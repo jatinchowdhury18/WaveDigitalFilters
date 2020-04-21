@@ -1,11 +1,18 @@
-/*
-  ==============================================================================
+#ifndef PARALLEL_H_INCLUDED
+#define PARALLEL_H_INCLUDED
 
-    Paralle.h
-    Created: 20 Apr 2020 11:32:27am
-    Author:  jatin
+#include "TwoPort.h"
 
-  ==============================================================================
-*/
+class Parallel : public TwoPort
+{
+public:
+    Parallel();
+    virtual ~Parallel() {}
 
-#pragma once
+    bool prepare (double sampleRate);
+
+private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Parallel)
+};
+
+#endif // PARALLEL_H_INCLUDED

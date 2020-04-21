@@ -6,9 +6,13 @@
   <MAINGROUP id="Tbb2o6" name="WDFPrototyper">
     <GROUP id="{284320E8-5F0B-D92E-B143-C360EE739E15}" name="Source">
       <GROUP id="{95E4EA0B-77CC-9D13-BFFB-443CAAE7FBF7}" name="GUI">
+        <FILE id="LYhkZ2" name="CapacitorCell.h" compile="0" resource="0" file="Source/GUI/CapacitorCell.h"/>
         <FILE id="N74Tu2" name="Cell.h" compile="0" resource="0" file="Source/GUI/Cell.h"/>
         <FILE id="MZdPT8" name="IdealVsCell.h" compile="0" resource="0" file="Source/GUI/IdealVsCell.h"/>
+        <FILE id="Etjq1w" name="InductorCell.h" compile="0" resource="0" file="Source/GUI/InductorCell.h"/>
+        <FILE id="b9rm58" name="InverterCell.h" compile="0" resource="0" file="Source/GUI/InverterCell.h"/>
         <FILE id="ts2vD3" name="LeafCell.h" compile="0" resource="0" file="Source/GUI/LeafCell.h"/>
+        <FILE id="af3xJL" name="OnePortCell.h" compile="0" resource="0" file="Source/GUI/OnePortCell.h"/>
         <FILE id="zO6X3t" name="ParallelCell.h" compile="0" resource="0" file="Source/GUI/ParallelCell.h"/>
         <FILE id="zc2mfh" name="ResistorCell.h" compile="0" resource="0" file="Source/GUI/ResistorCell.h"/>
         <FILE id="XlOs66" name="RootCell.h" compile="0" resource="0" file="Source/GUI/RootCell.h"/>
@@ -17,10 +21,18 @@
         <FILE id="Ci9v7u" name="TwoPortCell.h" compile="0" resource="0" file="Source/GUI/TwoPortCell.h"/>
       </GROUP>
       <GROUP id="{2416B5D8-E389-3196-50BE-8E1DDC6996D1}" name="Nodes">
+        <FILE id="WQEkM8" name="Capacitor.cpp" compile="1" resource="0" file="Source/Nodes/Capacitor.cpp"/>
+        <FILE id="sa7hjZ" name="Capacitor.h" compile="0" resource="0" file="Source/Nodes/Capacitor.h"/>
         <FILE id="nnhvu1" name="IdealVs.cpp" compile="1" resource="0" file="Source/Nodes/IdealVs.cpp"/>
         <FILE id="SN7p17" name="IdealVs.h" compile="0" resource="0" file="Source/Nodes/IdealVs.h"/>
+        <FILE id="GWZawQ" name="Inductor.cpp" compile="1" resource="0" file="Source/Nodes/Inductor.cpp"/>
+        <FILE id="Nme7IF" name="Inductor.h" compile="0" resource="0" file="Source/Nodes/Inductor.h"/>
+        <FILE id="sLdwrM" name="Inverter.cpp" compile="1" resource="0" file="Source/Nodes/Inverter.cpp"/>
+        <FILE id="zSFro8" name="Inverter.h" compile="0" resource="0" file="Source/Nodes/Inverter.h"/>
         <FILE id="tfycjH" name="Leaf.h" compile="0" resource="0" file="Source/Nodes/Leaf.h"/>
         <FILE id="RwdRyZ" name="Node.h" compile="0" resource="0" file="Source/Nodes/Node.h"/>
+        <FILE id="Vq6Slb" name="OnePort.cpp" compile="1" resource="0" file="Source/Nodes/OnePort.cpp"/>
+        <FILE id="dIzxzP" name="OnePort.h" compile="0" resource="0" file="Source/Nodes/OnePort.h"/>
         <FILE id="ls5nLv" name="Parallel.cpp" compile="1" resource="0" file="Source/Nodes/Parallel.cpp"/>
         <FILE id="kAK4l6" name="Parallel.h" compile="0" resource="0" file="Source/Nodes/Parallel.h"/>
         <FILE id="zyB6mn" name="Resistor.cpp" compile="1" resource="0" file="Source/Nodes/Resistor.cpp"/>

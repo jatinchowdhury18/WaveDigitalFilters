@@ -8,9 +8,6 @@ WdfprototyperAudioProcessorEditor::WdfprototyperAudioProcessorEditor (Wdfprototy
     setSize (600, 600);
 
     refresh (processor.root.get());
-
-    // addAndMakeVisible (processor.root->getCell());
-    // processor.root->getCell()->setTopLeftPosition (275, 50);
 }
 
 WdfprototyperAudioProcessorEditor::~WdfprototyperAudioProcessorEditor()
@@ -36,7 +33,7 @@ void WdfprototyperAudioProcessorEditor::refresh (Node* node, int center)
         else
         {
             auto point = node->getParent()->getCell()->getPosition();
-            point.addXY (center * 75, 100);
+            point.addXY (center * 50, 70);
             cell->setTopLeftPosition (point);
         }
     }
@@ -44,6 +41,10 @@ void WdfprototyperAudioProcessorEditor::refresh (Node* node, int center)
     if (auto rootNode = dynamic_cast<RootNode*> (node))
     {
         refresh (rootNode->getChild());
+    }
+    else if (auto onePortNode = dynamic_cast<OnePort*> (node))
+    {
+        refresh (onePortNode->getChild());
     }
     else if (auto twoPortNode = dynamic_cast<TwoPort*> (node))
     {
@@ -79,7 +80,11 @@ void WdfprototyperAudioProcessorEditor::paintConnectionTree (Node* node, Graphic
     g.drawLine (start.x, start.y, end.x, end.y);
 
     // recurse
-    if (auto twoPortNode = dynamic_cast<TwoPort*> (node))
+    if (auto onePortNode = dynamic_cast<OnePort*> (node))
+    {
+        paintConnectionTree (onePortNode->getChild(), g);
+    }
+    else if (auto twoPortNode = dynamic_cast<TwoPort*> (node))
     {
         paintConnectionTree (twoPortNode->getChild (0), g);
         paintConnectionTree (twoPortNode->getChild (1), g);

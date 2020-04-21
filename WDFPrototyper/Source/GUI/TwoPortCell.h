@@ -16,12 +16,12 @@ public:
     {
         auto addChildren = [=] (PopupMenu& m, int idx)
         {
-            m.addItem ("Series",   [=] { node.setChild (idx, IDs::Adaptor::Series); });
-            m.addItem ("Parallel", {});
-            m.addItem ("Inverter", {});
-            m.addItem ("Resistor", [=] { node.setChild (idx, IDs::Leaf::Resistor); });
-            m.addItem ("Capacitor", {});
-            m.addItem ("Inductor", {});
+            m.addItem ("Series",    [=] { node.setChild (idx, IDs::Adaptor::Series); });
+            m.addItem ("Parallel",  [=] { node.setChild (idx, IDs::Adaptor::Parallel); });
+            m.addItem ("Inverter",  [=] { node.setChild (idx, IDs::Adaptor::Inverter); });
+            m.addItem ("Resistor",  [=] { node.setChild (idx, IDs::Leaf::Resistor); });
+            m.addItem ("Capacitor", [=] { node.setChild (idx, IDs::Leaf::Capacitor); });
+            m.addItem ("Inductor",  [=] { node.setChild (idx, IDs::Leaf::Inductor); });
         };
 
         PopupMenu childrenMenu1;

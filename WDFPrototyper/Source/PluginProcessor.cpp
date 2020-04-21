@@ -199,11 +199,11 @@ void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
 {
     ScopedNoDenormals noDenormals;
     
-    if (! isPrepared)
+    if (! isPrepared || probeNode == nullptr)
+    {
+        buffer.clear();
         return;
-
-    if (probeNode == nullptr)
-        return;
+    }
 
     if (inputNode == nullptr)
     {
@@ -211,7 +211,7 @@ void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
         for (int n = 0; n < buffer.getNumSamples(); ++n)
         {
             root->getWDF()->incident (root->getChild()->getWDF()->reflected());
-            probeNode->getWDF()->voltage();
+            x[n] = (float) probeNode->getWDF()->voltage();
             root->getChild()->getWDF()->incident (root->getWDF()->reflected());
         }
     }
@@ -223,7 +223,7 @@ void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             inputNode->input (x[n]);
 
             root->getWDF()->incident (root->getChild()->getWDF()->reflected());
-            probeNode->getWDF()->voltage();
+            x[n] = (float) probeNode->getWDF()->voltage();
             root->getChild()->getWDF()->incident (root->getWDF()->reflected());
         }
     }

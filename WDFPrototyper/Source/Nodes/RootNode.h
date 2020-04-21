@@ -4,6 +4,8 @@
 #include "Node.h"
 #include "../IDs.h"
 #include "Series.h"
+#include "Parallel.h"
+#include "Inverter.h"
 
 class RootNode : public Node
 {
@@ -17,6 +19,10 @@ public:
     {
         if (childType == IDs::Adaptor::Series)
             child = std::make_unique<Series>();
+        else if (childType == IDs::Adaptor::Parallel)
+            child = std::make_unique<Parallel>();
+        else if (childType == IDs::Adaptor::Inverter)
+            child = std::make_unique<Inverter>();
         else
         {
             jassertfalse;
@@ -24,7 +30,7 @@ public:
         }
 
         child->setParent (this);
-        listeners.call (&Listener::addNode ,this, child.get());
+        listeners.call (&Listener::addNode, this, child.get());
     }
 
     bool prepare (double sampleRate)

@@ -15,7 +15,7 @@ public:
 
     virtual void getPopupMenu (PopupMenu& p) = 0;
 
-    void mouseDown (const MouseEvent& e) override
+    void mouseDown (const MouseEvent&) override
     {
         PopupMenu p;
         getPopupMenu (p);

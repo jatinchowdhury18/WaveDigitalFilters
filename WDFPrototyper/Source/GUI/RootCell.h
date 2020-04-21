@@ -17,8 +17,8 @@ public:
     {
         PopupMenu childrenMenu;
         childrenMenu.addItem ("Series",   [=] { node.setChild (IDs::Adaptor::Series); });
-        childrenMenu.addItem ("Parallel", {});
-        childrenMenu.addItem ("Inverter", {});
+        childrenMenu.addItem ("Parallel", [=] { node.setChild (IDs::Adaptor::Parallel); });
+        childrenMenu.addItem ("Inverter", [=] { node.setChild (IDs::Adaptor::Inverter); });
 
         p.addSubMenu ("Set child", childrenMenu);
     }

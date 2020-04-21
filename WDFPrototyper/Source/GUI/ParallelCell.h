@@ -1,11 +1,29 @@
-/*
-  ==============================================================================
+#ifndef PARALLELCELL_H_INCLUDED
+#define PARALLELCELL_H_INCLUDED
 
-    ParallelCell.h
-    Created: 20 Apr 2020 11:35:28am
-    Author:  jatin
+#include "TwoPortCell.h"
+#include "../Nodes/Parallel.h"
 
-  ==============================================================================
-*/
+class ParallelCell : public TwoPortCell
+{
+public:
+    ParallelCell (Parallel& node) :
+        TwoPortCell (node),
+        node (node)
+    {}
 
-#pragma once
+    void paint (Graphics& g) override
+    {
+        g.fillAll (Colours::white);
+
+        g.setColour (Colours::black);
+        g.drawFittedText ("Par", getLocalBounds(), Justification::centred, 1);
+    }
+
+private:
+    Parallel& node;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParallelCell)
+};
+
+#endif // PARALLELCELL_H_INCLUDED
