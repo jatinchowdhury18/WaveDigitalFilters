@@ -17,6 +17,10 @@
         <FILE id="ts2vD3" name="LeafCell.h" compile="0" resource="0" file="Source/GUI/LeafCell.h"/>
         <FILE id="af3xJL" name="OnePortCell.h" compile="0" resource="0" file="Source/GUI/OnePortCell.h"/>
         <FILE id="zO6X3t" name="ParallelCell.h" compile="0" resource="0" file="Source/GUI/ParallelCell.h"/>
+        <FILE id="Mh5ZQS" name="ResistiveIsCell.h" compile="0" resource="0"
+              file="Source/GUI/ResistiveIsCell.h"/>
+        <FILE id="WtuVrz" name="ResistiveVsCell.h" compile="0" resource="0"
+              file="Source/GUI/ResistiveVsCell.h"/>
         <FILE id="zc2mfh" name="ResistorCell.h" compile="0" resource="0" file="Source/GUI/ResistorCell.h"/>
         <FILE id="XlOs66" name="RootCell.h" compile="0" resource="0" file="Source/GUI/RootCell.h"/>
         <FILE id="PgerwZ" name="SeriesCell.h" compile="0" resource="0" file="Source/GUI/SeriesCell.h"/>
@@ -45,6 +49,10 @@
         <FILE id="dIzxzP" name="OnePort.h" compile="0" resource="0" file="Source/Nodes/OnePort.h"/>
         <FILE id="ls5nLv" name="Parallel.cpp" compile="1" resource="0" file="Source/Nodes/Parallel.cpp"/>
         <FILE id="kAK4l6" name="Parallel.h" compile="0" resource="0" file="Source/Nodes/Parallel.h"/>
+        <FILE id="oJ9Lru" name="ResistiveIs.cpp" compile="1" resource="0" file="Source/Nodes/ResistiveIs.cpp"/>
+        <FILE id="SHx2mS" name="ResistiveIs.h" compile="0" resource="0" file="Source/Nodes/ResistiveIs.h"/>
+        <FILE id="gLF1DB" name="ResistiveVs.cpp" compile="1" resource="0" file="Source/Nodes/ResistiveVs.cpp"/>
+        <FILE id="Og2XbC" name="ResistiveVs.h" compile="0" resource="0" file="Source/Nodes/ResistiveVs.h"/>
         <FILE id="zyB6mn" name="Resistor.cpp" compile="1" resource="0" file="Source/Nodes/Resistor.cpp"/>
         <FILE id="CBDsQB" name="Resistor.h" compile="0" resource="0" file="Source/Nodes/Resistor.h"/>
         <FILE id="EByGxd" name="RootNode.cpp" compile="1" resource="0" file="Source/Nodes/RootNode.cpp"/>

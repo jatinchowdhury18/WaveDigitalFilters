@@ -8,6 +8,8 @@ namespace IDs
         Resistor,
         Capacitor,
         Inductor,
+        ResistiveVs,
+        ResistiveIs,
     };
 
     enum Adaptor

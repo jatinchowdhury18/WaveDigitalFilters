@@ -5,6 +5,8 @@
 #include "Resistor.h"
 #include "Capacitor.h"
 #include "Inductor.h"
+#include "ResistiveVs.h"
+#include "ResistiveIs.h"
 
 OnePort::OnePort()
 {
@@ -36,6 +38,10 @@ void OnePort::setChild (IDs::Leaf childType)
         child = std::make_unique<Capacitor>();
     else if (childType == IDs::Leaf::Inductor)
         child = std::make_unique<Inductor>();
+    else if (childType == IDs::Leaf::ResistiveVs)
+        child = std::make_unique<ResistiveVs>();
+    else if (childType == IDs::Leaf::ResistiveIs)
+        child = std::make_unique<ResistiveIs>();
     else
     {
         jassertfalse;

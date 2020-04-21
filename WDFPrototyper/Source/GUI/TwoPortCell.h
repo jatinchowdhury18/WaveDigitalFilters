@@ -16,12 +16,14 @@ public:
     {
         auto addChildren = [=] (PopupMenu& m, int idx)
         {
-            m.addItem ("Series",    [=] { node.setChild (idx, IDs::Adaptor::Series); });
-            m.addItem ("Parallel",  [=] { node.setChild (idx, IDs::Adaptor::Parallel); });
-            m.addItem ("Inverter",  [=] { node.setChild (idx, IDs::Adaptor::Inverter); });
-            m.addItem ("Resistor",  [=] { node.setChild (idx, IDs::Leaf::Resistor); });
-            m.addItem ("Capacitor", [=] { node.setChild (idx, IDs::Leaf::Capacitor); });
-            m.addItem ("Inductor",  [=] { node.setChild (idx, IDs::Leaf::Inductor); });
+            m.addItem ("Series",         [=] { node.setChild (idx, IDs::Adaptor::Series); });
+            m.addItem ("Parallel",       [=] { node.setChild (idx, IDs::Adaptor::Parallel); });
+            m.addItem ("Inverter",       [=] { node.setChild (idx, IDs::Adaptor::Inverter); });
+            m.addItem ("Resistor",       [=] { node.setChild (idx, IDs::Leaf::Resistor); });
+            m.addItem ("Capacitor",      [=] { node.setChild (idx, IDs::Leaf::Capacitor); });
+            m.addItem ("Inductor",       [=] { node.setChild (idx, IDs::Leaf::Inductor); });
+            m.addItem ("Voltage Source", [=] { node.setChild (idx, IDs::Leaf::ResistiveVs); });
+            m.addItem ("Current Source", [=] { node.setChild (idx, IDs::Leaf::ResistiveIs); });
         };
 
         PopupMenu childrenMenu1;
