@@ -60,6 +60,7 @@ public:
 
     //==============================================================================
     void addNode (Node* node, Node* newNode) override;
+    void replaceNode (Node* oldNode, Node* newNode) override;
     void changeProbe (Node* node) override;
     void changeInput (Node* newInput) override;
 

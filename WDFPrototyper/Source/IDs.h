@@ -16,6 +16,14 @@ namespace IDs
         Parallel,
         Inverter,
     };
+
+    enum Root
+    {
+        IdealVs,
+        IdealIs,
+        Diode,
+        DiodePair,
+    };
 };
 
 #endif // IDS_H_INCLUDED

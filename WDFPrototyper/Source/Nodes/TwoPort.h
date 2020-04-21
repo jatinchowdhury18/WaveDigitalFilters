@@ -11,9 +11,13 @@ public:
     virtual ~TwoPort() {}
 
     Node* getChild (int idx) { return child[idx].get(); }
+    Node* getChildReleased (int idx) { return child[idx].release(); }
 
     void setChild (int idx, IDs::Adaptor childType);
     void setChild (int idx, IDs::Leaf childType);
+    void setChild (int idx, Node* newChild);
+
+    void replaceNode (IDs::Adaptor type);
 
     bool prepare (double sampleRate);
 

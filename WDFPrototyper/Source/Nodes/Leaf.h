@@ -2,6 +2,7 @@
 #define LEAF_H_INCLUDED
 
 #include "Node.h"
+#include "../IDs.h"
 
 class Leaf : public Node
 {
@@ -10,13 +11,9 @@ public:
     virtual ~Leaf() {}
 
     bool getProbe() { return isProbe; }
-    void setProbe (bool probe)
-    { 
-        isProbe = probe;
+    void setProbe (bool probe);
 
-        if (probe)
-            listeners.call (&Listener::changeProbe, this);
-    }
+    void replaceNode (IDs::Leaf type);
 
 private:
     bool isProbe = false;

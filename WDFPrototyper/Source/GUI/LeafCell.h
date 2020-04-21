@@ -14,7 +14,14 @@ public:
 
     void getPopupMenu (PopupMenu& p) override
     {
-        p.addItem ("Probe", true, node.getProbe(), [=] { node.setProbe (! node.getProbe()); });
+        PopupMenu m;
+        m.addItem ("Resistor",  [=] { node.replaceNode (IDs::Leaf::Resistor); });
+        m.addItem ("Inductor",  [=] { node.replaceNode (IDs::Leaf::Inductor); });
+        m.addItem ("Capacitor", [=] { node.replaceNode (IDs::Leaf::Capacitor); });
+
+        p.addSubMenu ("Replace Node", m);
+
+        p.addItem ("Probe", true, node.getProbe(), [=] { node.setProbe (true); });
     }
 
 private:

@@ -42,6 +42,29 @@ void TwoPort::setChild (int idx, IDs::Leaf childType)
     listeners.call (&Listener::addNode, this, child[idx].get());
 }
 
+void TwoPort::setChild (int idx, Node* newChild)
+{
+    child[idx].reset (newChild);
+    child[idx]->setParent (this);
+}
+
+void TwoPort::replaceNode (IDs::Adaptor type)
+{
+    Node* newNode;
+
+    if (type == IDs::Adaptor::Series)
+        newNode = new Series;
+    else if (type == IDs::Adaptor::Parallel)
+        newNode = new Parallel;
+    else
+    {
+        jassertfalse;
+        return;
+    }
+
+    listeners.call (&Listener::replaceNode, this, newNode);
+}
+
 bool TwoPort::prepare (double sampleRate)
 {
     bool result = Node::prepare (sampleRate);

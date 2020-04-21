@@ -14,6 +14,7 @@ public:
 
     void setChild (IDs::Adaptor childType);
     void setChild (IDs::Leaf childType);
+    void setChild (Node* newChild);
 
     bool prepare (double sampleRate);
 

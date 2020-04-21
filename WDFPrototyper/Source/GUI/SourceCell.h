@@ -13,7 +13,7 @@ public:
 
     void getPopupMenu (PopupMenu& p)
     {
-        p.addItem ("Input", true, source.getInput(), [=] { source.setInput (! source.getInput()); });
+        p.addItem ("Input", true, source.getInput(), [=] { source.setInput (true); });
     }
 
 private:

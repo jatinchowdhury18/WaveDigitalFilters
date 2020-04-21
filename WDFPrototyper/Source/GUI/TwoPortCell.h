@@ -32,6 +32,12 @@ public:
 
         p.addSubMenu ("Set child 1", childrenMenu1);
         p.addSubMenu ("Set child 2", childrenMenu2);
+
+        PopupMenu m;
+        m.addItem ("Series",   [=] { node.replaceNode (IDs::Adaptor::Series); });
+        m.addItem ("Parallel", [=] { node.replaceNode (IDs::Adaptor::Parallel); });
+
+        p.addSubMenu ("Replace Node", m);
     }
 
 private:

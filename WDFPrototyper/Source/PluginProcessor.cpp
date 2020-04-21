@@ -46,6 +46,68 @@ void WdfprototyperAudioProcessor::addNode (Node* node, Node* newNode)
     isPrepared = root->prepare (getSampleRate());
 }
 
+void WdfprototyperAudioProcessor::replaceNode (Node* oldNode, Node* newNode)
+{
+    newNode->addListener (this);
+
+    // update children of new node
+    if (auto rootOldNode = dynamic_cast<RootNode*> (oldNode))
+    {
+        auto rootNewNode = dynamic_cast<RootNode*> (newNode);
+        auto child = rootOldNode->getChildReleased();
+        if (child != nullptr)
+            rootNewNode->setChild (child);
+    }
+    else if (auto twoPortOldNode = dynamic_cast<TwoPort*> (oldNode))
+    {
+        auto twoPortNewNode = dynamic_cast<TwoPort*> (newNode);
+        for (int idx = 0; idx < 2; ++idx)
+        {
+            auto child = twoPortOldNode->getChildReleased (idx);
+            if (child != nullptr)
+                twoPortNewNode->setChild (idx, child);
+        }
+    }
+
+    // attach new node to parent
+    if (auto rootNewNode = dynamic_cast<RootNode*> (newNode))
+    {
+        root.reset (rootNewNode);
+    }
+    else
+    {
+        auto parent = oldNode->getParent();
+
+        if (auto rootParent = dynamic_cast<RootNode*> (parent))
+        {
+            rootParent->setChild (newNode);
+        }
+        else if (auto onePortParent = dynamic_cast<OnePort*> (parent))
+        {
+            onePortParent->setChild (newNode);
+        }
+        else if (auto twoPortParent = dynamic_cast<TwoPort*> (parent))
+        {
+            int idx = 0;
+            for (; idx < 2; ++idx)
+            {
+                if (twoPortParent->getChild (idx) == oldNode)
+                    break;
+            }
+
+            twoPortParent->setChild (idx, newNode);
+        }
+    }
+
+    if (auto editor = dynamic_cast<WdfprototyperAudioProcessorEditor*> (getActiveEditor()))
+    {
+        editor->refresh (root.get());
+        editor->repaint();
+    }
+
+    isPrepared = root->prepare (getSampleRate());
+}
+
 void WdfprototyperAudioProcessor::changeProbe (Node* node)
 {
     setProbe (root.get(), node);

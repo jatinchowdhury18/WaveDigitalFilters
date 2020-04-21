@@ -46,6 +46,12 @@ void OnePort::setChild (IDs::Leaf childType)
     listeners.call (&Listener::addNode, this, child.get());
 }
 
+void OnePort::setChild (Node* newChild)
+{
+    child.reset (newChild);
+    child->setParent (this);
+}
+
 bool OnePort::prepare (double sampleRate)
 {
     bool result = Node::prepare (sampleRate);

@@ -14,39 +14,14 @@ public:
     virtual ~RootNode() {}
 
     Node* getChild() { return child.get(); }
+    Node* getChildReleased() { return child.release(); }
 
-    void setChild (IDs::Adaptor childType)
-    {
-        if (childType == IDs::Adaptor::Series)
-            child = std::make_unique<Series>();
-        else if (childType == IDs::Adaptor::Parallel)
-            child = std::make_unique<Parallel>();
-        else if (childType == IDs::Adaptor::Inverter)
-            child = std::make_unique<Inverter>();
-        else
-        {
-            jassertfalse;
-            return;
-        }
+    void setChild (IDs::Adaptor childType);
+    void setChild (Node* newChild);
 
-        child->setParent (this);
-        listeners.call (&Listener::addNode, this, child.get());
-    }
+    void replaceNode (IDs::Root type);
 
-    bool prepare (double sampleRate)
-    {
-        bool result = Node::prepare (sampleRate);
-
-        if (child.get() != nullptr)
-            result = child->prepare (sampleRate);
-        else
-            result = false;
-
-        if (result)
-            wdf.get()->connectToNode (child->getWDF());
-
-        return result;
-    }
+    bool prepare (double sampleRate) override;
 
 private:
     std::unique_ptr<Node> child;

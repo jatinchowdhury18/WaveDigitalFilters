@@ -15,6 +15,14 @@ public:
 
     void getPopupMenu (PopupMenu& p) override
     {
+        PopupMenu m;
+        m.addItem ("Ideal Vs",   [=] { node.replaceNode (IDs::Root::IdealVs); });
+        m.addItem ("Ideal Is",   [=] { node.replaceNode (IDs::Root::IdealIs); });
+        m.addItem ("Diode",      [=] { node.replaceNode (IDs::Root::Diode); });
+        m.addItem ("Diode Pair", [=] { node.replaceNode (IDs::Root::DiodePair); });
+
+        p.addSubMenu ("Replace Node", m);
+
         PopupMenu childrenMenu;
         childrenMenu.addItem ("Series",   [=] { node.setChild (IDs::Adaptor::Series); });
         childrenMenu.addItem ("Parallel", [=] { node.setChild (IDs::Adaptor::Parallel); });
