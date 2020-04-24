@@ -674,6 +674,8 @@ public:
         Vt (Vt)
     {}
 
+    virtual ~DiodePair() {}
+
     inline void calcImpedance() {}
 
     inline void incident (double x) override
@@ -702,6 +704,8 @@ public:
         Is (Is),
         Vt (Vt)
     {}
+
+    virtual ~Diode() {}
 
     inline void calcImpedance() {}
 
