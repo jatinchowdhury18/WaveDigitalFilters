@@ -9,7 +9,7 @@ public:
     DiodePair();
     ~DiodePair() {}
 
-    bool prepare (double sampleRate);
+    bool prepare (double sampleRate) override;
 
 private:
     Property* Is; // saturation current

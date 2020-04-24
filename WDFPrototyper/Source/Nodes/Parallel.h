@@ -9,7 +9,7 @@ public:
     Parallel();
     virtual ~Parallel() {}
 
-    bool prepare (double sampleRate);
+    bool prepare (double sampleRate) override;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Parallel)

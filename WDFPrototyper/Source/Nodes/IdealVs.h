@@ -11,7 +11,7 @@ public:
     IdealVs();
     ~IdealVs() {}
 
-    bool prepare (double sampleRate);
+    bool prepare (double sampleRate) override;
 
     void setInput (bool input) override;
     void setVoltage (float voltageValue);

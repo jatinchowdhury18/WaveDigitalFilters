@@ -19,7 +19,7 @@ public:
 
     void replaceNode (IDs::Adaptor type);
 
-    bool prepare (double sampleRate);
+    bool prepare (double sampleRate) override;
 
 protected:
     std::unique_ptr<Node> child[2];

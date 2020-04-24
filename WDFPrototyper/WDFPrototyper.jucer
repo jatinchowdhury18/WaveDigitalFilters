@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="VmKn1b" name="WDFPrototyper" projectType="audioplug" jucerVersion="5.4.4"
-              companyName="chowdsp" pluginFormats="buildStandalone" cppLanguageStandard="17"
-              headerPath="../../../shared">
+              companyName="chowdsp" pluginFormats="buildAU,buildStandalone,buildVST,buildVST3"
+              cppLanguageStandard="17" headerPath="../../../shared">
   <MAINGROUP id="Tbb2o6" name="WDFPrototyper">
     <GROUP id="{284320E8-5F0B-D92E-B143-C360EE739E15}" name="Source">
       <GROUP id="{95E4EA0B-77CC-9D13-BFFB-443CAAE7FBF7}" name="GUI">

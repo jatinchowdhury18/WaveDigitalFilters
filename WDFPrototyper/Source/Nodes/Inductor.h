@@ -9,7 +9,7 @@ public:
     Inductor();
     virtual ~Inductor() {}
 
-    bool prepare (double sampleRate);
+    bool prepare (double sampleRate) override;
 
 private:
     Property* inductance;

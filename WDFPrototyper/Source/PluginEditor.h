@@ -17,7 +17,7 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
-    void changeListenerCallback (ChangeBroadcaster* source);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
 
 private:
     WdfprototyperAudioProcessor& processor;

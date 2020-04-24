@@ -16,7 +16,7 @@ public:
     void setChild (IDs::Leaf childType);
     void setChild (Node* newChild);
 
-    bool prepare (double sampleRate);
+    bool prepare (double sampleRate) override;
 
 protected:
     std::unique_ptr<Node> child;
