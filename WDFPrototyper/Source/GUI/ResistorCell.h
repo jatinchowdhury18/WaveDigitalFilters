@@ -15,7 +15,7 @@ public:
 
     void paint (Graphics& g) override
     {
-        g.fillAll (Colours::white);
+        g.fillAll (node.getProbe() ? Colours::greenyellow : Colours::white);
 
         g.setColour (Colours::black);
         g.drawFittedText ("Res", getLocalBounds(), Justification::centred, 1);

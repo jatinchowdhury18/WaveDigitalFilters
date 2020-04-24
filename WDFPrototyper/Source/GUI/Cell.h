@@ -5,7 +5,8 @@
 #include "../Nodes/Property.h"
 
 class Cell : public Component,
-             public ChangeBroadcaster
+             public ChangeBroadcaster,
+             public TooltipClient
 {
 public:
     Cell (const OwnedArray<Property>& props) :
@@ -28,6 +29,18 @@ public:
         getPopupMenu (p);
 
         p.show();
+    }
+
+    String getTooltip() override
+    {
+        if (props.isEmpty())
+            return {};
+
+        String result;
+        for (auto p : props)
+            result += p->name + ": " + String (p->value, 3, true) + "\n";
+
+        return result;
     }
 
 private:

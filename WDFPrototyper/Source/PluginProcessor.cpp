@@ -111,6 +111,7 @@ void WdfprototyperAudioProcessor::replaceNode (Node* oldNode, Node* newNode)
 void WdfprototyperAudioProcessor::changeProbe (Node* node)
 {
     setProbe (root.get(), node);
+    node->getCell()->repaint();
 }
 
 void WdfprototyperAudioProcessor::changeInput (Node* newInput)
@@ -122,6 +123,9 @@ void WdfprototyperAudioProcessor::setProbe (Node* parent, Node* node)
 {
     if (auto rootNode = dynamic_cast<RootNode*> (parent))
         setProbe (rootNode->getChild(), node);
+
+    else if (auto onePortNode = dynamic_cast<OnePort*> (parent))
+        setProbe (onePortNode->getChild(), node);
 
     else if (auto twoPortNode = dynamic_cast<TwoPort*> (parent))
     {
