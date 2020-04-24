@@ -13,7 +13,12 @@ public:
 
     bool prepare (double sampleRate);
 
+    void setInput (bool input) override;
+    void setCurrent (float currentValue);
+
 private:
+    Property* current;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (IdealIs)
 };
 

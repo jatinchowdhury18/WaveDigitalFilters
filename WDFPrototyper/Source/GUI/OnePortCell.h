@@ -8,6 +8,7 @@ class OnePortCell : public Cell
 {
 public:
     OnePortCell (OnePort& node) :
+        Cell (node.getProps()),
         node (node)
     {}
     virtual ~OnePortCell() {}
@@ -26,6 +27,8 @@ public:
         m.addItem ("Current Source",  [=] { node.setChild (IDs::Leaf::ResistiveIs); });
 
         p.addSubMenu ("Set child", m);
+
+        Cell::getPopupMenu (p);
     }
 
 private:

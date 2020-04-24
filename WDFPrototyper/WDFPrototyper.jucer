@@ -17,6 +17,10 @@
         <FILE id="ts2vD3" name="LeafCell.h" compile="0" resource="0" file="Source/GUI/LeafCell.h"/>
         <FILE id="af3xJL" name="OnePortCell.h" compile="0" resource="0" file="Source/GUI/OnePortCell.h"/>
         <FILE id="zO6X3t" name="ParallelCell.h" compile="0" resource="0" file="Source/GUI/ParallelCell.h"/>
+        <FILE id="emmpJO" name="PropertiesComponent.cpp" compile="1" resource="0"
+              file="Source/GUI/PropertiesComponent.cpp"/>
+        <FILE id="vmR7ja" name="PropertiesComponent.h" compile="0" resource="0"
+              file="Source/GUI/PropertiesComponent.h"/>
         <FILE id="Mh5ZQS" name="ResistiveIsCell.h" compile="0" resource="0"
               file="Source/GUI/ResistiveIsCell.h"/>
         <FILE id="WtuVrz" name="ResistiveVsCell.h" compile="0" resource="0"
@@ -49,6 +53,7 @@
         <FILE id="dIzxzP" name="OnePort.h" compile="0" resource="0" file="Source/Nodes/OnePort.h"/>
         <FILE id="ls5nLv" name="Parallel.cpp" compile="1" resource="0" file="Source/Nodes/Parallel.cpp"/>
         <FILE id="kAK4l6" name="Parallel.h" compile="0" resource="0" file="Source/Nodes/Parallel.h"/>
+        <FILE id="irvOn3" name="Property.h" compile="0" resource="0" file="Source/Nodes/Property.h"/>
         <FILE id="oJ9Lru" name="ResistiveIs.cpp" compile="1" resource="0" file="Source/Nodes/ResistiveIs.cpp"/>
         <FILE id="SHx2mS" name="ResistiveIs.h" compile="0" resource="0" file="Source/Nodes/ResistiveIs.h"/>
         <FILE id="gLF1DB" name="ResistiveVs.cpp" compile="1" resource="0" file="Source/Nodes/ResistiveVs.cpp"/>

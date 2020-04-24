@@ -9,6 +9,7 @@ class RootCell : public Cell
 {
 public:
     RootCell (RootNode& node) :
+        Cell (node.getProps()),
         node (node)
     {}
     virtual ~RootCell() {}
@@ -29,6 +30,8 @@ public:
         childrenMenu.addItem ("Inverter", [=] { node.setChild (IDs::Adaptor::Inverter); });
 
         p.addSubMenu ("Set child", childrenMenu);
+
+        Cell::getPopupMenu (p);
     }
 
 private:

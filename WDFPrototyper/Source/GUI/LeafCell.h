@@ -8,6 +8,7 @@ class LeafCell : public Cell
 {
 public:
     LeafCell (Leaf& node) :
+        Cell (node.getProps()),
         node (node)
     {}
     virtual ~LeafCell() {}
@@ -22,6 +23,8 @@ public:
         p.addSubMenu ("Replace Node", m);
 
         p.addItem ("Probe", true, node.getProbe(), [=] { node.setProbe (true); });
+
+        Cell::getPopupMenu (p);
     }
 
 private:

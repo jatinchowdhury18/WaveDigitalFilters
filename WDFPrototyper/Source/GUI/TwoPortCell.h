@@ -8,6 +8,7 @@ class TwoPortCell : public Cell
 {
 public:
     TwoPortCell (TwoPort& node) :
+        Cell (node.getProps()),
         node (node)
     {}
     virtual ~TwoPortCell() {}
@@ -40,6 +41,8 @@ public:
         m.addItem ("Parallel", [=] { node.replaceNode (IDs::Adaptor::Parallel); });
 
         p.addSubMenu ("Replace Node", m);
+
+        Cell::getPopupMenu (p);
     }
 
 private:

@@ -25,6 +25,7 @@ void WdfprototyperAudioProcessorEditor::refresh (Node* node, int center)
     if (isAdded < 0)
     {
         addAndMakeVisible (cell);
+        cell->addChangeListener (this);
 
         if (auto rootCast = dynamic_cast<RootCell*> (cell))
         {
@@ -91,7 +92,49 @@ void WdfprototyperAudioProcessorEditor::paintConnectionTree (Node* node, Graphic
     }
 }
 
+Node* getNodeForCell (Cell* cell, Node* startNode)
+{
+    if (startNode == nullptr)
+        return nullptr;
+
+    if (startNode->getCell() == cell)
+        return startNode;
+
+    if (auto rootCast = dynamic_cast<RootNode*> (startNode))
+    {
+        if (auto node = getNodeForCell (cell, rootCast->getChild()))
+            return node;
+    }
+    else if (auto onePortCast = dynamic_cast<OnePort*> (startNode))
+    {
+        if (auto node = getNodeForCell (cell, onePortCast->getChild()))
+            return node;
+    }
+    else if (auto twoPortCast = dynamic_cast<TwoPort*> (startNode))
+    {
+        if (auto node = getNodeForCell (cell, twoPortCast->getChild (0)))
+            return node;
+        else if (auto otherNode = getNodeForCell (cell, twoPortCast->getChild (1)))
+            return otherNode;
+    }
+
+    return nullptr;
+}
+
+void WdfprototyperAudioProcessorEditor::changeListenerCallback (ChangeBroadcaster* source)
+{
+    if (auto cellCast = dynamic_cast<Cell*> (source))
+    {
+        auto sourceNode = getNodeForCell (cellCast, processor.root.get());
+        if (sourceNode == nullptr)
+            return;
+
+        propsComp = std::make_unique<PropertiesComponent> (*sourceNode);
+        addAndMakeVisible (propsComp.get());
+        propsComp->setTopLeftPosition (150, 200);
+    }
+}
+
 void WdfprototyperAudioProcessorEditor::resized()
 {
-    
 }

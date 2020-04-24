@@ -15,7 +15,7 @@ public:
     }
 
     bool getInput() { return isInput; }
-    void setInput (bool input) { isInput = input; }
+    virtual void setInput (bool input) { isInput = input; }
 
 protected:
     std::function<void (double)> inputFunc;

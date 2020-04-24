@@ -26,7 +26,6 @@ public:
 
     void getPopupMenu (PopupMenu& p) override
     {
-        p.addItem ("Set voltage", {});
         SourceCell::getPopupMenu (p);
         RootCell::getPopupMenu (p);
     }

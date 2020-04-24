@@ -4,6 +4,7 @@
 #include "../GUI/Cell.h"
 #include "../MyDefs.h"
 #include "wdf.h"
+#include "Property.h"
 
 class Node
 {
@@ -28,6 +29,8 @@ public:
 
     WaveDigitalFilter::WDFNode* getWDF() { return wdf.get(); }
 
+    OwnedArray<Property>& getProps() { return props; }
+
 protected:
     Node* parent = nullptr;
     std::unique_ptr<Cell> cell;
@@ -35,6 +38,8 @@ protected:
     double fs = 44100.0;
 
     std::unique_ptr<WaveDigitalFilter::WDFNode> wdf;
+
+    OwnedArray<Property> props;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Node)
