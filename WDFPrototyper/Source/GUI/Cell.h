@@ -9,39 +9,15 @@ class Cell : public Component,
              public TooltipClient
 {
 public:
-    Cell (const OwnedArray<Property>& props) :
-        props (props)
-    {
-        setSize (50, 50);
-    }
-
+    Cell (const OwnedArray<Property>& props);
     virtual ~Cell() {}
 
-    virtual void getPopupMenu (PopupMenu& p)
-    {
-        if (! props.isEmpty())
-            p.addItem ("Properties", [=] { sendChangeMessage(); });
-    }
+    virtual void getPopupMenu (PopupMenu& p);
 
-    void mouseDown (const MouseEvent&) override
-    {
-        PopupMenu p;
-        getPopupMenu (p);
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDrag (const MouseEvent& e) override;
 
-        p.show();
-    }
-
-    String getTooltip() override
-    {
-        if (props.isEmpty())
-            return {};
-
-        String result;
-        for (auto p : props)
-            result += p->name + ": " + String (p->value, 3, true) + "\n";
-
-        return result;
-    }
+    String getTooltip() override;
 
 private:
     const OwnedArray<Property>& props;

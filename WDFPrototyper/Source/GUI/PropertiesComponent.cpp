@@ -10,6 +10,7 @@ PropertiesComponent::PropertiesComponent (Node& node) :
         Label* pLabel = new Label;
         pLabel->setText (p->name, dontSendNotification);
         addAndMakeVisible (pLabel);
+        pLabel->setInterceptsMouseClicks (false, false);
         labels.add (pLabel);
 
         auto pValLabel = values.add (new Label);
@@ -35,6 +36,12 @@ PropertiesComponent::PropertiesComponent (Node& node) :
         setVisible (false);
         getParentComponent()->repaint();
     };
+}
+
+void PropertiesComponent::mouseDrag (const MouseEvent& e)
+{
+    setTopLeftPosition (e.getEventRelativeTo (getParentComponent()).getPosition());
+    getParentComponent()->repaint();
 }
 
 void PropertiesComponent::paint (Graphics& g)

@@ -11,6 +11,8 @@ public:
     void paint (Graphics& g) override;
     void resized() override;
 
+    void mouseDrag (const MouseEvent& e) override;
+
 private:
     Node& node;
 
@@ -18,6 +20,8 @@ private:
     OwnedArray<Label> values;
 
     TextButton enter { "Enter" };
+
+    bool shouldMove = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PropertiesComponent)
 };

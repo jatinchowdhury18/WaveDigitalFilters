@@ -7,6 +7,7 @@
     <GROUP id="{284320E8-5F0B-D92E-B143-C360EE739E15}" name="Source">
       <GROUP id="{95E4EA0B-77CC-9D13-BFFB-443CAAE7FBF7}" name="GUI">
         <FILE id="LYhkZ2" name="CapacitorCell.h" compile="0" resource="0" file="Source/GUI/CapacitorCell.h"/>
+        <FILE id="QneNcB" name="Cell.cpp" compile="1" resource="0" file="Source/GUI/Cell.cpp"/>
         <FILE id="N74Tu2" name="Cell.h" compile="0" resource="0" file="Source/GUI/Cell.h"/>
         <FILE id="c0klZ3" name="DiodeCell.h" compile="0" resource="0" file="Source/GUI/DiodeCell.h"/>
         <FILE id="fPdvoG" name="DiodePairCell.h" compile="0" resource="0" file="Source/GUI/DiodePairCell.h"/>
