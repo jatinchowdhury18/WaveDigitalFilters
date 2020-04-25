@@ -1,8 +1,7 @@
 #ifndef CELL_H_INCLUDED
 #define CELL_H_INCLUDED
 
-#include "JuceHeader.h"
-#include "../Nodes/Property.h"
+#include "Property.h"
 
 class Cell : public Component,
              public ChangeBroadcaster,

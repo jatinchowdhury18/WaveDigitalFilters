@@ -2,6 +2,7 @@
 #define SOURCECELL_H_INCLUDED
 
 #include "Cell.h"
+#include "Source.h"
 
 class SourceCell
 {

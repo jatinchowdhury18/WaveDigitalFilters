@@ -1,7 +1,7 @@
 #ifndef PROPERTIESCOMPONENT_H_INCLUDED
 #define PROPERTIESCOMPONENT_H_INCLUDED
 
-#include "../Nodes/Node.h"
+#include "Node.h"
 
 class PropertiesComponent : public Component
 {

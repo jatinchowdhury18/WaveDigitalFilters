@@ -1,7 +1,7 @@
 #ifndef NODE_H_INCLUDED
 #define NODE_H_INCLUDED
 
-#include "../GUI/Cell.h"
+#include "Cell.h"
 #include "../MyDefs.h"
 #include "wdf.h"
 #include "Property.h"

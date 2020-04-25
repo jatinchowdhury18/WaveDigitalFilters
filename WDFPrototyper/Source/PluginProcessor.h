@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "Nodes/RootNode.h"
-#include "Nodes/Leaf.h"
-#include "Nodes/Source.h"
+#include "Roots/RootNode.h"
+#include "Leafs/Leaf.h"
+#include "Source.h"
 
 //==============================================================================
 /**

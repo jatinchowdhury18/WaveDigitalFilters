@@ -1,6 +1,5 @@
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "GUI/RootCell.h"
+#include "RootCells/RootCell.h"
 
 WdfprototyperAudioProcessorEditor::WdfprototyperAudioProcessorEditor (WdfprototyperAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)

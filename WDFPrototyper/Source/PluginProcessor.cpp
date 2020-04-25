@@ -10,7 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "Nodes/IdealVs.h"
+#include "Roots/IdealVs.h"
 
 //==============================================================================
 WdfprototyperAudioProcessor::WdfprototyperAudioProcessor()

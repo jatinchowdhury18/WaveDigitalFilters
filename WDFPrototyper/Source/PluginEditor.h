@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
-#include "GUI/PropertiesComponent.h"
+#include "PropertiesComponent.h"
 
 class WdfprototyperAudioProcessorEditor : public AudioProcessorEditor,
                                           private ChangeListener
