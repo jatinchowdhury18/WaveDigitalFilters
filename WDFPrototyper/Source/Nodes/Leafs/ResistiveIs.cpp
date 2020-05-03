@@ -22,11 +22,19 @@ ResistiveIs::ResistiveIs() :
     props.add (resistance);
 }
 
+ResistiveIs::~ResistiveIs()
+{
+    if (getInput())
+        listeners.call (&Listener::changeInput, nullptr);
+}
+
 void ResistiveIs::setInput (bool input)
 {
     Source::setInput (input);
 
-    if (! getInput())
+    if (getInput())
+        listeners.call (&Listener::changeInput, this);
+    else
         setCurrent (current->value);
 }
 

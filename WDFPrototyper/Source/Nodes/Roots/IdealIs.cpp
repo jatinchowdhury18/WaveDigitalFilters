@@ -15,11 +15,19 @@ IdealIs::IdealIs() :
     props.add (current);
 }
 
+IdealIs::~IdealIs()
+{
+    if (getInput())
+        listeners.call (&Listener::changeInput, nullptr);
+}
+
 void IdealIs::setInput (bool input)
 {
     Source::setInput (input);
 
-    if (! getInput())
+    if (getInput())
+        listeners.call (&Listener::changeInput, this);
+    else
         setCurrent (current->value);
 }
 

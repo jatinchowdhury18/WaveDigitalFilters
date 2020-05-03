@@ -63,6 +63,7 @@ public:
     void replaceNode (Node* oldNode, Node* newNode) override;
     void changeProbe (Node* node) override;
     void changeInput (Node* newInput) override;
+    void unprepare() override;
 
     void setProbe (Node* parent, Node* node);
     void setInput (Node* parent, Node* node);
@@ -73,7 +74,10 @@ private:
     Source* inputNode = nullptr;
     Leaf* probeNode = nullptr;
 
-    bool isPrepared = false;
+    std::atomic_bool isPrepared  { false };
+    std::atomic_bool isRendering { false };
+
+    bool isDeleting = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WdfprototyperAudioProcessor)
 };

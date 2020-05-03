@@ -6,6 +6,8 @@
 
 void RootNode::setChild (IDs::Adaptor childType)
 {
+    listeners.call (&Listener::unprepare);
+
     if (childType == IDs::Adaptor::Series)
         child = std::make_unique<Series>();
     else if (childType == IDs::Adaptor::Parallel)

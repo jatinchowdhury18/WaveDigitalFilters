@@ -31,6 +31,15 @@ WdfprototyperAudioProcessor::WdfprototyperAudioProcessor()
 
 WdfprototyperAudioProcessor::~WdfprototyperAudioProcessor()
 {
+    isDeleting = true;
+}
+
+void WdfprototyperAudioProcessor::unprepare()
+{
+    while (isRendering)
+        Thread::sleep (2);
+
+    isPrepared = false;
 }
 
 void WdfprototyperAudioProcessor::addNode (Node* node, Node* newNode)
@@ -110,12 +119,24 @@ void WdfprototyperAudioProcessor::replaceNode (Node* oldNode, Node* newNode)
 
 void WdfprototyperAudioProcessor::changeProbe (Node* node)
 {
+    probeNode = nullptr;
+
+    if (isDeleting)
+        return;
+
     setProbe (root.get(), node);
-    node->getCell()->repaint();
+
+    if (node != nullptr)
+        node->getCell()->repaint();
 }
 
 void WdfprototyperAudioProcessor::changeInput (Node* newInput)
 {
+    inputNode = nullptr;
+
+    if (isDeleting)
+        return;
+
     setInput (root.get(), newInput);
 }
 
@@ -144,21 +165,24 @@ void WdfprototyperAudioProcessor::setProbe (Node* parent, Node* node)
 
 void WdfprototyperAudioProcessor::setInput (Node* parent, Node* node)
 {
-    if (auto rootNode = dynamic_cast<RootNode*> (parent))
-        setInput (rootNode->getChild(), node);
-
-    else if (auto twoPortNode = dynamic_cast<TwoPort*> (parent))
-    {
-        setInput (twoPortNode->getChild (0), node);
-        setInput (twoPortNode->getChild (1), node);
-    }
-
-    else if (auto sourceNode = dynamic_cast<Source*> (parent))
+    if (auto sourceNode = dynamic_cast<Source*> (parent))
     {
         if (parent != node)
             sourceNode->setInput (false);
         else
             inputNode = sourceNode;
+    }
+
+    if (auto rootNode = dynamic_cast<RootNode*> (parent))
+        setInput (rootNode->getChild(), node);
+
+    else if (auto onePortNode = dynamic_cast<OnePort*> (parent))
+        setInput (onePortNode->getChild(), node);
+
+    else if (auto twoPortNode = dynamic_cast<TwoPort*> (parent))
+    {
+        setInput (twoPortNode->getChild (0), node);
+        setInput (twoPortNode->getChild (1), node);
     }
 }
 
@@ -271,6 +295,8 @@ void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
         return;
     }
 
+    isRendering = true;
+
     if (inputNode == nullptr)
     {
         auto* x = buffer.getWritePointer (0);
@@ -296,6 +322,8 @@ void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
 
     if (buffer.getNumChannels() == 2)
         buffer.copyFrom (1, 0, buffer, 0, 0, buffer.getNumSamples());
+
+    isRendering = false;
 }
 
 //==============================================================================

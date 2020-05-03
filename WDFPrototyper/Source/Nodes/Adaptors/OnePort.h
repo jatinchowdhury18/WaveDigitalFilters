@@ -7,7 +7,7 @@
 class OnePort : public Node
 {
 public:
-    OnePort();
+    OnePort() {}
     virtual ~OnePort() {}
 
     Node* getChild() { return child.get(); }

@@ -8,7 +8,7 @@ class Leaf : public Node
 {
 public:
     Leaf() {}
-    virtual ~Leaf() {}
+    virtual ~Leaf();
 
     bool getProbe() { return isProbe; }
     void setProbe (bool probe);

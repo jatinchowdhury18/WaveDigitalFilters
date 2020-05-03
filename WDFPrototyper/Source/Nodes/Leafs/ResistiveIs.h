@@ -9,7 +9,7 @@ class ResistiveIs : public Leaf,
 {
 public:
     ResistiveIs();
-    virtual ~ResistiveIs() {}
+    virtual ~ResistiveIs();
 
     bool prepare (double sampleRate) override;
 

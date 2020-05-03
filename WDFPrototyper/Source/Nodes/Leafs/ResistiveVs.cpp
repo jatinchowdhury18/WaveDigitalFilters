@@ -22,11 +22,19 @@ ResistiveVs::ResistiveVs() :
     props.add (resistance);
 }
 
+ResistiveVs::~ResistiveVs()
+{
+    if (getInput())
+        listeners.call (&Listener::changeInput, nullptr);
+}
+
 void ResistiveVs::setInput (bool input)
 {
     Source::setInput (input);
 
-    if (! getInput())
+    if (getInput())
+        listeners.call (&Listener::changeInput, this);
+    else
         setVoltage (voltage->value);
 }
 

@@ -9,7 +9,7 @@ class IdealVs : public RootNode,
 {
 public:
     IdealVs();
-    ~IdealVs() {}
+    ~IdealVs();
 
     bool prepare (double sampleRate) override;
 

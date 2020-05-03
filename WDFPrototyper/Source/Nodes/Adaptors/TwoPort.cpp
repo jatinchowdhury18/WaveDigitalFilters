@@ -10,6 +10,8 @@
 
 void TwoPort::setChild (int idx, IDs::Adaptor childType)
 {
+    listeners.call (&Listener::unprepare);
+
     if (childType == IDs::Adaptor::Series)
         child[idx] = std::make_unique<Series>();
     else if (childType == IDs::Adaptor::Parallel)
@@ -28,6 +30,8 @@ void TwoPort::setChild (int idx, IDs::Adaptor childType)
 
 void TwoPort::setChild (int idx, IDs::Leaf childType)
 {
+    listeners.call (&Listener::unprepare);
+
     if (childType == IDs::Leaf::Resistor)
         child[idx] = std::make_unique<Resistor>();
     else if (childType == IDs::Leaf::Capacitor)

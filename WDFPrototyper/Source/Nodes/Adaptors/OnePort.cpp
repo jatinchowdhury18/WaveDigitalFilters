@@ -8,12 +8,10 @@
 #include "Leafs/ResistiveVs.h"
 #include "Leafs/ResistiveIs.h"
 
-OnePort::OnePort()
-{
-}
-
 void OnePort::setChild (IDs::Adaptor childType)
 {
+    listeners.call (&Listener::unprepare);
+
     if (childType == IDs::Adaptor::Series)
         child = std::make_unique<Series>();
     else if (childType == IDs::Adaptor::Parallel)
@@ -32,6 +30,8 @@ void OnePort::setChild (IDs::Adaptor childType)
 
 void OnePort::setChild (IDs::Leaf childType)
 {
+    listeners.call (&Listener::unprepare);
+
     if (childType == IDs::Leaf::Resistor)
         child = std::make_unique<Resistor>();
     else if (childType == IDs::Leaf::Capacitor)

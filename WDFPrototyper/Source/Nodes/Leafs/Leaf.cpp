@@ -3,6 +3,12 @@
 #include "Leafs/Capacitor.h"
 #include "Leafs/Inductor.h"
 
+Leaf::~Leaf()
+{
+    if (isProbe)
+        listeners.call (&Listener::changeProbe, nullptr);
+}
+
 void Leaf::setProbe (bool probe)
 {
     isProbe = probe;

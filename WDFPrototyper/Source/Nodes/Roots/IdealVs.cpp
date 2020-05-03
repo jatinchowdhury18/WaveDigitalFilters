@@ -15,11 +15,19 @@ IdealVs::IdealVs() :
     props.add (voltage);
 }
 
+IdealVs::~IdealVs()
+{
+    if (getInput())
+        listeners.call (&Listener::changeInput, nullptr);
+}
+
 void IdealVs::setInput (bool input)
 {
     Source::setInput (input);
 
-    if (! getInput())
+    if (getInput())
+        listeners.call (&Listener::changeInput, this);
+    else
         setVoltage (voltage->value);
 }
 

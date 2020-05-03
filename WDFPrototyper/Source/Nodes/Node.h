@@ -11,7 +11,8 @@ class Node
     CREATE_LISTENER (Listener, listeners, virtual void addNode (Node* /*node*/, Node* /*newNode*/) {}\
                                           virtual void replaceNode (Node* /*oldNode*/, Node* /*newNode*/) {}\
                                           virtual void changeProbe (Node* /*newProbe*/) {}\
-                                          virtual void changeInput (Node* /*newInput*/) {})
+                                          virtual void changeInput (Node* /*newInput*/) {}\
+                                          virtual void unprepare() {})
 public:
     Node() {}
     virtual ~Node() {}
