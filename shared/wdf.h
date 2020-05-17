@@ -17,16 +17,16 @@ public:
     virtual inline void calcImpedance() = 0;
     virtual inline void propagateImpedance() = 0;
 
-    virtual inline void incident (double x) = 0;
-    virtual inline double reflected() = 0;
+    virtual inline void incident (double x) noexcept = 0;
+    virtual inline double reflected() noexcept = 0;
 
 
-    inline double voltage()
+    inline double voltage() const noexcept
     {
         return (a + b) / 2.0;
     }
 
-    inline double current()
+    inline double current() const noexcept
     {
         return (a - b) / (2.0 * R);
     }
@@ -92,12 +92,12 @@ public:
         G = 1.0 / R;
     }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = 0.0;
         return b;
@@ -138,13 +138,13 @@ public:
         G = 1.0 / R;
     }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
         z = a;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = b_coef * b + a_coef * z;
         return b;
@@ -193,13 +193,13 @@ public:
         G = 1.0 / R;
     }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
         z = a;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = b_coef * b - a_coef * z;
         return b;
@@ -229,12 +229,12 @@ public:
 
     void setClosed (bool shouldClose) { closed = shouldClose; }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = closed ? -a : a;
         return b;
@@ -259,12 +259,12 @@ public:
 
     inline void calcImpedance() override {}
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = a;
         return b;
@@ -286,12 +286,12 @@ public:
 
     inline void calcImpedance() override {}
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = -a;
         return b;
@@ -317,13 +317,13 @@ public:
         G = 1.0 / R;
     }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
         port1->incident (-x);
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = -port1->reflected();
         return b;
@@ -365,13 +365,13 @@ public:
         C = -y[1][0] / denominator;
     }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
         port1->incident(A * port1->b + B * x);
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = C * port1->reflected();
         return b;
@@ -421,23 +421,26 @@ public:
     {
         G = port1->G + port2->G;
         R = 1.0 / G;
+        port1Reflect = port1->G/G;
+        port2Reflect = port2->G/G;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
-        b = (port1->G/G) * port1->reflected() + (port2->G/G) * port2->reflected();
+        b = port1Reflect * port1->reflected() + port2Reflect * port2->reflected();
         return b;
     }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
-        port1->incident (x + (port2->b - port1->b) * (port2->G/G));
-        port2->incident (x + (port2->b - port1->b) * (-port1->G/G));
+        port1->incident (x + (port2->b - port1->b) * port2Reflect);
+        port2->incident (x + (port2->b - port1->b) * -port1Reflect);
         a = x;
     }
 
 private:
-    
+    double port1Reflect = 1.0;
+    double port2Reflect = 1.0;
 };
 
 /** WDF 3-port series adaptor */
@@ -455,24 +458,27 @@ public:
     {
         R = port1->R + port2->R;
         G = 1.0 / R;
+        port1Reflect = port1->R/R;
+        port2Reflect = port2->R/R;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = -(port1->reflected() + port2->reflected());
         return b;
     }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
-        port1->incident (port1->b - (port1->R/R) * (x + port1->b + port2->b));
-        port2->incident (port2->b - (port2->R/R) * (x + port1->b + port2->b)); 
+        port1->incident (port1->b - port1Reflect * (x + port1->b + port2->b));
+        port2->incident (port2->b - port2Reflect * (x + port1->b + port2->b)); 
 
         a = x;
     }
 
 private:
-    
+    double port1Reflect = 1.0;
+    double port2Reflect = 1.0;
 };
 
 /** WDF Voltage source with resistance */
@@ -504,12 +510,12 @@ public:
 
     void setVoltage (double newV) { Vs = newV; }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = Vs;
         return b;
@@ -534,12 +540,12 @@ public:
 
     void setVoltage (double newV) { Vs = newV; }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = -a + 2.0 * Vs;
         return b;
@@ -578,12 +584,12 @@ public:
 
     void setCurrent (double newI) { Is = newI; }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = 2 * R * Is;
         return b;
@@ -612,12 +618,12 @@ public:
 
     void setCurrent (double newI) { Is = newI; }
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         b = 2 * next->R * Is + a;
         return b;
@@ -678,12 +684,12 @@ public:
 
     inline void calcImpedance() {}
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         // See eqn (18) from reference paper
         double lambda = (double) signum (a);
@@ -709,12 +715,12 @@ public:
 
     inline void calcImpedance() {}
 
-    inline void incident (double x) override
+    inline void incident (double x) noexcept override
     {
         a = x;
     }
 
-    inline double reflected() override
+    inline double reflected() noexcept override
     {
         // See eqn (10) from reference paper
         b = a + 2 * next->R * Is - 2 * Vt * omega4 (float (log (next->R * Is / Vt) + (a + next->R * Is) / Vt));
