@@ -303,8 +303,10 @@ void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
         for (int n = 0; n < buffer.getNumSamples(); ++n)
         {
             root->getWDF()->incident (root->getChild()->getWDF()->reflected());
-            x[n] = (float) probeNode->getWDF()->voltage();
             root->getChild()->getWDF()->incident (root->getWDF()->reflected());
+
+            // since we're probing a leaf, probe after WDF render
+            x[n] = (float) probeNode->getWDF()->voltage();
         }
     }
     else
@@ -315,8 +317,10 @@ void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             inputNode->input (x[n]);
 
             root->getWDF()->incident (root->getChild()->getWDF()->reflected());
-            x[n] = (float) probeNode->getWDF()->voltage();
             root->getChild()->getWDF()->incident (root->getWDF()->reflected());
+
+            // since we're probing a leaf, probe after WDF render
+            x[n] = (float) probeNode->getWDF()->voltage();
         }
     }
 
