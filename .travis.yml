@@ -21,6 +21,7 @@ env:
   - PLUGIN=TR_808/OutputFilter
   - PLUGIN=TR_808/PulseShaper
   - PLUGIN=WDFPrototyper
+  - PLUGIN=BaxandallEQ
 
 stages:
   - name: addons
