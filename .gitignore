@@ -13,4 +13,6 @@ JuceLibraryCode
 *.swp
 *~
 
+# IDE settings
 .vscode
+.idea

@@ -1,11 +1,12 @@
 # Wave Digital Filters
 
-[![Build Status](https://travis-ci.com/jatinchowdhury18/WaveDigitalFilters.svg?token=Ub9niJrqG1Br1qaaxp7E&branch=master)](https://travis-ci.com/jatinchowdhury18/WaveDigitalFilters)
-
 This repository contains code for real-time implementations
 of virtual analog circuit models using wave digital filters.
 
-**NOTE: The WDF library in this repository is now maintained as a part of the [chowdsp_utils](https://github.com/Chowdhury-DSP/chowdsp_utils) JUCE module. This repository now serves only as a reference of how to implement some example circuits using the WDF code.**
+**NOTE: The WDF library in this repository is now maintained as a part of the
+[chowdsp_utils](https://github.com/Chowdhury-DSP/chowdsp_utils) JUCE module.
+This repository now serves as a reference of how to implement some example circuits
+using the WDF code.**
 
 ## Organization
 
