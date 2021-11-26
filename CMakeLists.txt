@@ -7,3 +7,4 @@ add_subdirectory(modules)
 
 add_subdirectory(VoltageDivider)
 add_subdirectory(CurrentDivider)
+add_subdirectory(PassiveLPF)
