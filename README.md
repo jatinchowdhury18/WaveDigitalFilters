@@ -1,18 +1,23 @@
 # Wave Digital Filters
 
-This repository contains code for real-time implementations
-of virtual analog circuit models using wave digital filters.
+TODO:
+
+- migrate Baxandall EQ
+- migrate TR-808 circuits
+- migrate WDFPrototyper
+- set up GitHub Actions
+- work on WDF unit tests
+
+This repository contains code for real-time implementations of virtual analog circuit models using wave digital filters.
 
 **NOTE: The WDF library in this repository is now maintained as a part of the
-[chowdsp_utils](https://github.com/Chowdhury-DSP/chowdsp_utils) JUCE module.
-This repository now serves as a reference of how to implement some example circuits
-using the WDF code.**
+[chowdsp_utils](https://github.com/Chowdhury-DSP/chowdsp_utils) JUCE module. This repository now serves as a reference
+of how to implement some example circuits using the WDF code.**
 
 ## Organization
 
-`shared/` contains general WDF code, that can be used by any circuit model.
-Each other folder contains a single circuit model implemented as an audio
-plugin using JUCE/C++.
+`shared/` contains general WDF code, that can be used by any circuit model. Each other folder contains a single circuit
+model implemented as an audio plugin using JUCE/C++.
 
 ## Background
 
