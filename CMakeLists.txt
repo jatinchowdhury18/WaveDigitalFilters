@@ -6,3 +6,4 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(modules)
 
 add_subdirectory(VoltageDivider)
+add_subdirectory(CurrentDivider)

@@ -2,7 +2,7 @@
 #
 # Creates an audio plugin for a WDF with this root directory
 function(create_wdf_plugin plugin_name plugin_code)
-    message(STATUS "Setting up WDF plugin: Voltage Divider")
+    message(STATUS "Setting up WDF plugin: ${plugin_name}")
 
     set(JUCE_FORMATS AU VST3 Standalone)
     juce_add_plugin(${plugin_name}
