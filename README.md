@@ -2,7 +2,6 @@
 
 TODO:
 
-- migrate TR-808 circuits
 - migrate WDFPrototyper
 - set up GitHub Actions
 - work on WDF unit tests
