@@ -22,8 +22,8 @@ public:
 
     void setCircuitParams (float cutoff)
     {
-        double Cap = 47.0e-9f;
-        double Res = 1.0f / (MathConstants<float>::twoPi * cutoff * Cap);
+        constexpr auto Cap = 47.0e-9f;
+        const auto Res = 1.0f / (MathConstants<float>::twoPi * cutoff * Cap);
 
         C1.setCapacitanceValue (Cap);
         R1.setResistanceValue (Res);

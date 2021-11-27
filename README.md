@@ -2,7 +2,6 @@
 
 TODO:
 
-- migrate Baxandall EQ
 - migrate TR-808 circuits
 - migrate WDFPrototyper
 - set up GitHub Actions
