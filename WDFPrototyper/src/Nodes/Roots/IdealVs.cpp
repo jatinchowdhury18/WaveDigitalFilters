@@ -33,13 +33,16 @@ void IdealVs::setInput (bool input)
 
 void IdealVs::setVoltage (float voltageValue)
 {
-    if (auto vs = dynamic_cast<WaveDigitalFilter::IdealVoltageSource*> (wdf.get()))
-        vs->setVoltage (voltageValue);        
+    if (auto vs = dynamic_cast<chowdsp::WDF::IdealVoltageSource<double>*> (wdf.get()))
+        vs->setVoltage (voltageValue);
 }
 
 bool IdealVs::prepare (double sampleRate)
 {
-    wdf = std::make_unique<WaveDigitalFilter::IdealVoltageSource>();
+    if (child == nullptr || child->getWDF() == nullptr)
+        return false;
+
+    wdf = std::make_unique<chowdsp::WDF::IdealVoltageSource<double>> (child->getWDF());
     setVoltage (voltage->value);
 
     bool result = RootNode::prepare (sampleRate);
@@ -48,9 +51,15 @@ bool IdealVs::prepare (double sampleRate)
     {
         inputFunc = [=] (double x)
         {
-            dynamic_cast<WaveDigitalFilter::IdealVoltageSource*> (wdf.get())->setVoltage (x);
+            dynamic_cast<chowdsp::WDF::IdealVoltageSource<double>*> (wdf.get())->setVoltage (x);
         };
     }
 
     return result;
+}
+
+void IdealVs::childUpdated()
+{
+    wdf = std::make_unique<chowdsp::WDF::IdealVoltageSource<double>> (child->getWDF());
+    setVoltage (voltage->value);
 }

@@ -40,13 +40,13 @@ void ResistiveIs::setInput (bool input)
 
 void ResistiveIs::setCurrent (float currentValue)
 {
-    if (auto is = dynamic_cast<WaveDigitalFilter::ResistiveCurrentSource*> (wdf.get()))
+    if (auto is = dynamic_cast<chowdsp::WDF::ResistiveCurrentSource<double>*> (wdf.get()))
         is->setCurrent (currentValue);
 }
 
 void ResistiveIs::setResistance (float resValue)
 {
-    if (auto is = dynamic_cast<WaveDigitalFilter::ResistiveCurrentSource*> (wdf.get()))
+    if (auto is = dynamic_cast<chowdsp::WDF::ResistiveCurrentSource<double>*> (wdf.get()))
         is->setResistanceValue (resValue);
 }
 
@@ -56,12 +56,12 @@ bool ResistiveIs::prepare (double sampleRate)
 
     if (result)
     {
-        wdf = std::make_unique<WaveDigitalFilter::ResistiveCurrentSource> (resistance->value);
+        wdf = std::make_unique<chowdsp::WDF::ResistiveCurrentSource<double>> (resistance->value);
         setCurrent (current->value);
 
         inputFunc = [=] (double x)
         {
-            dynamic_cast<WaveDigitalFilter::ResistiveCurrentSource*> (wdf.get())->setCurrent (x);
+            dynamic_cast<chowdsp::WDF::ResistiveCurrentSource<double>*> (wdf.get())->setCurrent (x);
         };
     }
 

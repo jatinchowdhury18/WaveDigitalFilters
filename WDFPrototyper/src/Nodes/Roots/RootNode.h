@@ -22,10 +22,12 @@ public:
     void replaceNode (IDs::Root type);
 
     bool prepare (double sampleRate) override;
+    virtual void childUpdated() = 0;
 
-private:
+protected:
     std::unique_ptr<Node> child;
 
+private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RootNode)
 };
 

@@ -1,29 +1,8 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Roots/IdealVs.h"
 
-//==============================================================================
 WdfprototyperAudioProcessor::WdfprototyperAudioProcessor()
-#ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", AudioChannelSet::stereo(), true)
-                     #endif
-                       )
-#endif
 {
     root = std::make_unique<IdealVs>();
     root->addListener (this);
@@ -186,69 +165,6 @@ void WdfprototyperAudioProcessor::setInput (Node* parent, Node* node)
     }
 }
 
-//==============================================================================
-const String WdfprototyperAudioProcessor::getName() const
-{
-    return JucePlugin_Name;
-}
-
-bool WdfprototyperAudioProcessor::acceptsMidi() const
-{
-   #if JucePlugin_WantsMidiInput
-    return true;
-   #else
-    return false;
-   #endif
-}
-
-bool WdfprototyperAudioProcessor::producesMidi() const
-{
-   #if JucePlugin_ProducesMidiOutput
-    return true;
-   #else
-    return false;
-   #endif
-}
-
-bool WdfprototyperAudioProcessor::isMidiEffect() const
-{
-   #if JucePlugin_IsMidiEffect
-    return true;
-   #else
-    return false;
-   #endif
-}
-
-double WdfprototyperAudioProcessor::getTailLengthSeconds() const
-{
-    return 0.0;
-}
-
-int WdfprototyperAudioProcessor::getNumPrograms()
-{
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
-}
-
-int WdfprototyperAudioProcessor::getCurrentProgram()
-{
-    return 0;
-}
-
-void WdfprototyperAudioProcessor::setCurrentProgram (int index)
-{
-}
-
-const String WdfprototyperAudioProcessor::getProgramName (int index)
-{
-    return {};
-}
-
-void WdfprototyperAudioProcessor::changeProgramName (int index, const String& newName)
-{
-}
-
-//==============================================================================
 void WdfprototyperAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     AudioProcessor::setRateAndBufferSizeDetails (sampleRate, samplesPerBlock);
@@ -257,38 +173,10 @@ void WdfprototyperAudioProcessor::prepareToPlay (double sampleRate, int samplesP
 
 void WdfprototyperAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
 }
 
-#ifndef JucePlugin_PreferredChannelConfigurations
-bool WdfprototyperAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+void WdfprototyperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
 {
-  #if JucePlugin_IsMidiEffect
-    ignoreUnused (layouts);
-    return true;
-  #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
-        return false;
-
-    // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-        return false;
-   #endif
-
-    return true;
-  #endif
-}
-#endif
-
-void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
-{
-    ScopedNoDenormals noDenormals;
-    
     if (! isPrepared || probeNode == nullptr)
     {
         buffer.clear();
@@ -330,32 +218,11 @@ void WdfprototyperAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     isRendering = false;
 }
 
-//==============================================================================
-bool WdfprototyperAudioProcessor::hasEditor() const
-{
-    return true; // (change this to false if you choose to not supply an editor)
-}
-
 AudioProcessorEditor* WdfprototyperAudioProcessor::createEditor()
 {
     return new WdfprototyperAudioProcessorEditor (*this);
 }
 
-//==============================================================================
-void WdfprototyperAudioProcessor::getStateInformation (MemoryBlock& destData)
-{
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
-}
-
-void WdfprototyperAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
-{
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
-}
-
-//==============================================================================
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {

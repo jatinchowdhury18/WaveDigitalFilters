@@ -40,13 +40,13 @@ void ResistiveVs::setInput (bool input)
 
 void ResistiveVs::setVoltage (float voltageValue)
 {
-    if (auto vs = dynamic_cast<WaveDigitalFilter::ResistiveVoltageSource*> (wdf.get()))
+    if (auto vs = dynamic_cast<chowdsp::WDF::ResistiveVoltageSource<double>*> (wdf.get()))
         vs->setVoltage (voltageValue);
 }
 
 void ResistiveVs::setResistance (float resValue)
 {
-    if (auto vs = dynamic_cast<WaveDigitalFilter::ResistiveVoltageSource*> (wdf.get()))
+    if (auto vs = dynamic_cast<chowdsp::WDF::ResistiveVoltageSource<double>*> (wdf.get()))
         vs->setResistanceValue (resValue);
 }
 
@@ -56,12 +56,12 @@ bool ResistiveVs::prepare (double sampleRate)
 
     if (result)
     {
-        wdf = std::make_unique<WaveDigitalFilter::ResistiveVoltageSource> (resistance->value);
+        wdf = std::make_unique<chowdsp::WDF::ResistiveVoltageSource<double>> (resistance->value);
         setVoltage (voltage->value);
 
         inputFunc = [=] (double x)
         {
-            dynamic_cast<WaveDigitalFilter::ResistiveVoltageSource*> (wdf.get())->setVoltage (x);
+            dynamic_cast<chowdsp::WDF::ResistiveVoltageSource<double>*> (wdf.get())->setVoltage (x);
         };
     }
 

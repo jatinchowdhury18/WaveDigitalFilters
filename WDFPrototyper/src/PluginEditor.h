@@ -19,7 +19,7 @@ public:
     void changeListenerCallback (ChangeBroadcaster* source) override;
 
 private:
-    WdfprototyperAudioProcessor& processor;
+    WdfprototyperAudioProcessor& proc;
 
     std::unique_ptr<PropertiesComponent> propsComp;
 

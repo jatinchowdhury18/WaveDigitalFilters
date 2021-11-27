@@ -8,7 +8,7 @@ Capacitor::Capacitor() :
 
     capacitance->valueChanged = [=]
     {
-        if (auto cap = dynamic_cast<WaveDigitalFilter::Capacitor*> (wdf.get()))
+        if (auto cap = dynamic_cast<chowdsp::WDF::Capacitor<double>*> (wdf.get()))
             cap->setCapacitanceValue (capacitance->value);
     };
     props.add (capacitance);
@@ -19,7 +19,7 @@ bool Capacitor::prepare (double sampleRate)
     bool result =  Leaf::prepare (sampleRate);
 
     if (result)
-        wdf = std::make_unique<WaveDigitalFilter::Capacitor> (capacitance->value, sampleRate);
+        wdf = std::make_unique<chowdsp::WDF::Capacitor<double>> (capacitance->value, sampleRate);
 
     return result;
 }

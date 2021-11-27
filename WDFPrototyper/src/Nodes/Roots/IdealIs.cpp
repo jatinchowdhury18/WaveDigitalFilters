@@ -33,13 +33,16 @@ void IdealIs::setInput (bool input)
 
 void IdealIs::setCurrent (float currentValue)
 {
-    if (auto is = dynamic_cast<WaveDigitalFilter::IdealCurrentSource*> (wdf.get()))
+    if (auto is = dynamic_cast<chowdsp::WDF::IdealCurrentSource<double>*> (wdf.get()))
         is->setCurrent (currentValue);
 }
 
 bool IdealIs::prepare (double sampleRate)
 {
-    wdf = std::make_unique<WaveDigitalFilter::IdealCurrentSource>();
+    if (child == nullptr || child->getWDF() == nullptr)
+        return false;
+
+    wdf = std::make_unique<chowdsp::WDF::IdealCurrentSource<double>> (child->getWDF());
     setCurrent (current->value);
 
     bool result = RootNode::prepare (sampleRate);
@@ -48,9 +51,15 @@ bool IdealIs::prepare (double sampleRate)
     {
         inputFunc = [=] (double x)
         {
-            dynamic_cast<WaveDigitalFilter::IdealCurrentSource*> (wdf.get())->setCurrent (x);
+            dynamic_cast<chowdsp::WDF::IdealCurrentSource<double>*> (wdf.get())->setCurrent (x);
         };
     }
 
     return result;
+}
+
+void IdealIs::childUpdated()
+{
+    wdf = std::make_unique<chowdsp::WDF::IdealCurrentSource<double>> (child->getWDF());
+    setCurrent (current->value);
 }

@@ -19,8 +19,7 @@ void Cell::mouseDown (const MouseEvent& e)
         PopupMenu p;
         getPopupMenu (p);
 
-        p.show();
-        return;
+        p.showMenuAsync (PopupMenu::Options());
     }
 }
 

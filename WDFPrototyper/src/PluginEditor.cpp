@@ -2,11 +2,11 @@
 #include "RootCells/RootCell.h"
 
 WdfprototyperAudioProcessorEditor::WdfprototyperAudioProcessorEditor (WdfprototyperAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+    : AudioProcessorEditor (&p), proc (p)
 {
     setSize (600, 600);
 
-    refresh (processor.root.get());
+    refresh (proc.root.get());
 }
 
 WdfprototyperAudioProcessorEditor::~WdfprototyperAudioProcessorEditor()
@@ -57,7 +57,7 @@ void WdfprototyperAudioProcessorEditor::paint (Graphics& g)
 {
     g.fillAll (Colours::black);
 
-    paintConnectionTree (processor.root.get(), g);
+    paintConnectionTree (proc.root.get(), g);
 }
 
 void WdfprototyperAudioProcessorEditor::paintConnectionTree (Node* node, Graphics& g)
@@ -124,7 +124,7 @@ void WdfprototyperAudioProcessorEditor::changeListenerCallback (ChangeBroadcaste
 {
     if (auto cellCast = dynamic_cast<Cell*> (source))
     {
-        auto sourceNode = getNodeForCell (cellCast, processor.root.get());
+        auto sourceNode = getNodeForCell (cellCast, proc.root.get());
         if (sourceNode == nullptr)
             return;
 

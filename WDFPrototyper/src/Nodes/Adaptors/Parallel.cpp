@@ -11,7 +11,7 @@ bool Parallel::prepare (double sampleRate)
     bool result = TwoPort::prepare (sampleRate);
 
     if (result)
-        wdf = std::make_unique<WaveDigitalFilter::WDFParallel> (child[0]->getWDF(), child[1]->getWDF());
+        wdf = std::make_unique<chowdsp::WDF::WDFParallel<double>> (child[0]->getWDF(), child[1]->getWDF());
 
     return result;
 }

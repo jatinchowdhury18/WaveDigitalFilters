@@ -11,7 +11,7 @@ bool Inverter::prepare (double sampleRate)
     bool result = OnePort::prepare (sampleRate);
 
     if (result)
-        wdf = std::make_unique<WaveDigitalFilter::PolarityInverter> (child->getWDF());
+        wdf = std::make_unique<chowdsp::WDF::PolarityInverter<double>> (child->getWDF());
 
     return result;
 }

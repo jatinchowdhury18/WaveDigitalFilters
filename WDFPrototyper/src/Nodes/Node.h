@@ -1,18 +1,19 @@
 #ifndef NODE_H_INCLUDED
 #define NODE_H_INCLUDED
 
-#include "Cell.h"
 #include "../MyDefs.h"
-#include "wdf.h"
+#include "Cell.h"
 #include "Property.h"
+
+//using namespace chowdsp::WDF;
+using WDFNode = chowdsp::WDF::WDF<double>;
 
 class Node
 {
-    CREATE_LISTENER (Listener, listeners, virtual void addNode (Node* /*node*/, Node* /*newNode*/) {}\
-                                          virtual void replaceNode (Node* /*oldNode*/, Node* /*newNode*/) {}\
-                                          virtual void changeProbe (Node* /*newProbe*/) {}\
-                                          virtual void changeInput (Node* /*newInput*/) {}\
-                                          virtual void unprepare() {})
+    CREATE_LISTENER (
+        Listener,
+        listeners,
+        virtual void addNode (Node* /*node*/, Node* /*newNode*/) {} virtual void replaceNode (Node* /*oldNode*/, Node* /*newNode*/) {} virtual void changeProbe (Node* /*newProbe*/) {} virtual void changeInput (Node* /*newInput*/) {} virtual void unprepare() {})
 public:
     Node() {}
     virtual ~Node() {}
@@ -23,12 +24,12 @@ public:
     void setParent (Node* newParent) { parent = newParent; }
 
     virtual bool prepare (double sampleRate)
-    { 
-        fs = sampleRate; 
+    {
+        fs = sampleRate;
         return true;
     }
 
-    WaveDigitalFilter::WDFNode* getWDF() { return wdf.get(); }
+    WDFNode* getWDF() { return wdf.get(); }
 
     OwnedArray<Property>& getProps() { return props; }
 
@@ -38,7 +39,7 @@ protected:
 
     double fs = 44100.0;
 
-    std::unique_ptr<WaveDigitalFilter::WDFNode> wdf;
+    std::unique_ptr<WDFNode> wdf;
 
     OwnedArray<Property> props;
 

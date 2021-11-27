@@ -8,7 +8,7 @@ Resistor::Resistor() :
 
     resistor->valueChanged = [=]
     {
-        if (auto res = dynamic_cast<WaveDigitalFilter::Resistor*> (wdf.get()))
+        if (auto res = dynamic_cast<chowdsp::WDF::Resistor<double>*> (wdf.get()))
             res->setResistanceValue (resistor->value);
     };
     props.add (resistor);
@@ -19,7 +19,7 @@ bool Resistor::prepare (double sampleRate)
     bool result =  Leaf::prepare (sampleRate);
 
     if (result)
-        wdf = std::make_unique<WaveDigitalFilter::Resistor> (resistor->value);
+        wdf = std::make_unique<chowdsp::WDF::Resistor<double>> (resistor->value);
 
     return result;
 }

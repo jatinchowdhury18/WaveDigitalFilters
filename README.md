@@ -1,11 +1,5 @@
 # Wave Digital Filters
 
-TODO:
-
-- migrate WDFPrototyper
-- set up GitHub Actions
-- work on WDF unit tests
-
 This repository contains code for real-time implementations of virtual analog circuit models using wave digital filters.
 
 **NOTE: The WDF library in this repository is now maintained as a part of the
