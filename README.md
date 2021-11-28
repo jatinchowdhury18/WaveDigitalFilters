@@ -54,7 +54,5 @@ Proc. of the 21st International Conference on Digital Audio Effects,
 
 ## Licensing
 
-The code in this repository belongs to Jatin Chowdhury, except the
-implementation of the Wright-Omega function approximations (`shared/omega.h`)
-which belongs to Stefano D'Angelo. More licensing details are
-still being worked out.
+The code in this repository is open source, and licensed under the General Public License Version 3.
+Enjoy!
