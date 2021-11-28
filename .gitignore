@@ -3,6 +3,7 @@ Builds
 BinaryData.h
 BinaryData*.cpp
 JuceLibraryCode
+build*/
 
 #Windows Temp Cache Files
 [Tt]humbs.db
@@ -13,4 +14,6 @@ JuceLibraryCode
 *.swp
 *~
 
+# IDE settings
 .vscode
+.idea
