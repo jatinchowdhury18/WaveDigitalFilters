@@ -8,8 +8,11 @@ of how to implement some example circuits using the WDF code.**
 
 ## Organization
 
-`shared/` contains general WDF code, that can be used by any circuit model. Each other folder contains a single circuit
-model implemented as an audio plugin using JUCE/C++.
+`modules/` contains git submodules for JUCE and chowdsp_utils, the latter of which comtains the WDF library.
+
+`WDFPrototyper/` contains a more advanced plugin that allows users to create and manipulate a WDF circuit model at run-time.
+
+All other directories contain an example implementation of a single WDF circuit model.
 
 ## Background
 
