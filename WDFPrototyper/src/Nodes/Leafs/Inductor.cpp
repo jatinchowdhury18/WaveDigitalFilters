@@ -8,7 +8,7 @@ Inductor::Inductor() :
 
     inductance->valueChanged = [=]
     {
-        if (auto ind = dynamic_cast<chowdsp::WDF::Inductor<double>*> (wdf.get()))
+        if (ind != nullptr)
             ind->setInductanceValue (inductance->value);
     };
     props.add (inductance);
@@ -16,10 +16,11 @@ Inductor::Inductor() :
 
 bool Inductor::prepare (double sampleRate)
 {
-    bool result =  Leaf::prepare (sampleRate);
+    if (! Leaf::prepare (sampleRate))
+        return false;
 
-    if (result)
-        wdf = std::make_unique<chowdsp::WDF::Inductor<double>> (inductance->value, sampleRate);
+    ind = std::make_unique<chowdsp::WDF::Inductor<double>> (inductance->value, sampleRate);
+    wdf = ind.get();
 
-    return result;
+    return true;
 }

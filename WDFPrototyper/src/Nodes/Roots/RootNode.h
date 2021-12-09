@@ -10,8 +10,8 @@
 class RootNode : public Node
 {
 public:
-    RootNode() {}
-    virtual ~RootNode() {}
+    RootNode() = default;
+    ~RootNode() override = default;
 
     Node* getChild() { return child.get(); }
     Node* getChildReleased() { return child.release(); }
@@ -22,7 +22,6 @@ public:
     void replaceNode (IDs::Root type);
 
     bool prepare (double sampleRate) override;
-    virtual void childUpdated() = 0;
 
 protected:
     std::unique_ptr<Node> child;

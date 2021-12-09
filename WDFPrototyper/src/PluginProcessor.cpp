@@ -15,9 +15,7 @@ WdfprototyperAudioProcessor::~WdfprototyperAudioProcessor()
 
 void WdfprototyperAudioProcessor::unprepare()
 {
-    while (isRendering)
-        Thread::sleep (2);
-
+    SpinLock::ScopedLockType sl { renderingLock };
     isPrepared = false;
 }
 
@@ -177,17 +175,17 @@ void WdfprototyperAudioProcessor::releaseResources()
 
 void WdfprototyperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
 {
-    if (! isPrepared || probeNode == nullptr)
+    SpinLock::ScopedTryLockType stl { renderingLock };
+    if (! isPrepared || probeNode == nullptr || ! stl.isLocked())
     {
         buffer.clear();
         return;
     }
 
-    isRendering = true;
-
+    const int channelIndex = 1;
     if (inputNode == nullptr)
     {
-        auto* x = buffer.getWritePointer (0);
+        auto* x = buffer.getWritePointer (channelIndex);
         for (int n = 0; n < buffer.getNumSamples(); ++n)
         {
             root->getWDF()->incident (root->getChild()->getWDF()->reflected());
@@ -199,7 +197,7 @@ void WdfprototyperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
     }
     else
     {
-        auto* x = buffer.getWritePointer (0);
+        auto* x = buffer.getWritePointer (channelIndex);
         for (int n = 0; n < buffer.getNumSamples(); ++n)
         {
             inputNode->input (x[n]);
@@ -213,9 +211,7 @@ void WdfprototyperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
     }
 
     if (buffer.getNumChannels() == 2)
-        buffer.copyFrom (1, 0, buffer, 0, 0, buffer.getNumSamples());
-
-    isRendering = false;
+        buffer.copyFrom (1 - channelIndex, 0, buffer, channelIndex, 0, buffer.getNumSamples());
 }
 
 AudioProcessorEditor* WdfprototyperAudioProcessor::createEditor()

@@ -1,9 +1,8 @@
 #include "ResistiveIs.h"
 #include "LeafCells/ResistiveIsCell.h"
 
-ResistiveIs::ResistiveIs() :
-    current (new Property ({"Current", 0.0f, -1.0f, 1.0f})),
-    resistance (new Property ({"Resistance", (float) 1.0e9, (float) 1.0e-9, (float) 1.0e-9}))
+ResistiveIs::ResistiveIs() : current (new Property ({ "Current", 0.0f, -1.0f, 1.0f })),
+                             resistance (new Property ({ "Resistance", (float) 1.0e9, (float) 1.0e-9, (float) 1.0e9 }))
 {
     cell = std::make_unique<ResistiveIsCell> (*this);
 
@@ -16,8 +15,7 @@ ResistiveIs::ResistiveIs() :
 
     resistance->valueChanged = [=]
     {
-        if (! getInput())
-            setResistance (resistance->value);
+        setResistance (resistance->value);
     };
     props.add (resistance);
 }
@@ -40,30 +38,29 @@ void ResistiveIs::setInput (bool input)
 
 void ResistiveIs::setCurrent (float currentValue)
 {
-    if (auto is = dynamic_cast<chowdsp::WDF::ResistiveCurrentSource<double>*> (wdf.get()))
-        is->setCurrent (currentValue);
+    if (resIs != nullptr)
+        resIs->setCurrent (currentValue);
 }
 
 void ResistiveIs::setResistance (float resValue)
 {
-    if (auto is = dynamic_cast<chowdsp::WDF::ResistiveCurrentSource<double>*> (wdf.get()))
-        is->setResistanceValue (resValue);
+    if (resIs != nullptr)
+        resIs->setResistanceValue (resValue);
 }
 
 bool ResistiveIs::prepare (double sampleRate)
 {
-    bool result =  Leaf::prepare (sampleRate);
+    if (! Leaf::prepare (sampleRate))
+        return false;
 
-    if (result)
+    resIs = std::make_unique<chowdsp::WDF::ResistiveCurrentSource<double>> (resistance->value);
+    wdf = resIs.get();
+    setCurrent (current->value);
+
+    inputFunc = [=] (double x)
     {
-        wdf = std::make_unique<chowdsp::WDF::ResistiveCurrentSource<double>> (resistance->value);
-        setCurrent (current->value);
+        resIs->setCurrent (x);
+    };
 
-        inputFunc = [=] (double x)
-        {
-            dynamic_cast<chowdsp::WDF::ResistiveCurrentSource<double>*> (wdf.get())->setCurrent (x);
-        };
-    }
-
-    return result;
+    return true;
 }

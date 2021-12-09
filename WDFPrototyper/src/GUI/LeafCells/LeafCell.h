@@ -11,18 +11,26 @@ public:
         Cell (node.getProps()),
         node (node)
     {}
-    virtual ~LeafCell() {}
+    ~LeafCell() override = default;
 
     void getPopupMenu (PopupMenu& p) override
     {
         PopupMenu m;
-        m.addItem ("Resistor",  [=] { node.replaceNode (IDs::Leaf::Resistor); });
-        m.addItem ("Inductor",  [=] { node.replaceNode (IDs::Leaf::Inductor); });
-        m.addItem ("Capacitor", [=] { node.replaceNode (IDs::Leaf::Capacitor); });
+        m.addItem ("Resistor", [=]
+                   { node.replaceNode (IDs::Leaf::Resistor); });
+        m.addItem ("Inductor", [=]
+                   { node.replaceNode (IDs::Leaf::Inductor); });
+        m.addItem ("Capacitor", [=]
+                   { node.replaceNode (IDs::Leaf::Capacitor); });
+        m.addItem ("Voltage Source", [=]
+                   { node.replaceNode (IDs::Leaf::ResistiveVs); });
+        m.addItem ("Current Source", [=]
+                   { node.replaceNode (IDs::Leaf::ResistiveIs); });
 
         p.addSubMenu ("Replace Node", m);
 
-        p.addItem ("Probe", true, node.getProbe(), [=] { node.setProbe (true); });
+        p.addItem ("Probe", true, node.getProbe(), [=]
+                   { node.setProbe (true); });
 
         Cell::getPopupMenu (p);
     }

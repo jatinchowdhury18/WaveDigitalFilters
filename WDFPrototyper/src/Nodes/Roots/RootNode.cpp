@@ -1,8 +1,8 @@
 #include "RootNode.h"
-#include "IdealVs.h"
-#include "IdealIs.h"
 #include "Diode.h"
 #include "DiodePair.h"
+#include "IdealIs.h"
+#include "IdealVs.h"
 
 void RootNode::setChild (IDs::Adaptor childType)
 {
@@ -32,36 +32,32 @@ void RootNode::setChild (Node* newChild)
 
 void RootNode::replaceNode (IDs::Root type)
 {
-    RootNode* newNode;
+    std::unique_ptr<RootNode> newNode;
 
     if (type == IDs::Root::IdealVs)
-        newNode = new IdealVs;
+        newNode = std::make_unique<IdealVs>();
     else if (type == IDs::Root::IdealIs)
-        newNode = new IdealIs;
+        newNode = std::make_unique<IdealIs>();
     else if (type == IDs::Root::Diode)
-        newNode = new Diode;
+        newNode = std::make_unique<Diode>();
     else if (type == IDs::Root::DiodePair)
-        newNode = new DiodePair;
+        newNode = std::make_unique<DiodePair>();
     else
     {
         jassertfalse;
         return;
     }
 
-    listeners.call (&Listener::replaceNode, this, newNode);
+    listeners.call (&Listener::replaceNode, this, newNode.release());
 }
 
 bool RootNode::prepare (double sampleRate)
 {
-    bool result = Node::prepare (sampleRate);
+    if (! Node::prepare (sampleRate))
+        return false;
 
-    if (child.get() != nullptr)
-        result = child->prepare (sampleRate);
-    else
-        result = false;
+    if (child == nullptr)
+        return false;
 
-    if (result)
-        wdf.get()->connectToNode (child->getWDF());
-
-    return result;
+    return child->prepare (sampleRate);
 }

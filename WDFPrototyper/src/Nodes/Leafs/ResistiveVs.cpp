@@ -1,9 +1,8 @@
 #include "ResistiveVs.h"
 #include "LeafCells/ResistiveVsCell.h"
 
-ResistiveVs::ResistiveVs() :
-    voltage (new Property ({"Voltage", 0.0f, -20.0f, 20.0f})),
-    resistance (new Property ({"Resistance", (float) 1.0e-9, (float) 1.0e-9, (float) 1.0e-9}))
+ResistiveVs::ResistiveVs() : voltage (new Property ({ "Voltage", 0.0f, -20.0f, 20.0f })),
+                             resistance (new Property ({ "Resistance", (float) 1.0e-9, (float) 1.0e-9, (float) 1.0e9 }))
 {
     cell = std::make_unique<ResistiveVsCell> (*this);
 
@@ -16,8 +15,7 @@ ResistiveVs::ResistiveVs() :
 
     resistance->valueChanged = [=]
     {
-        if (! getInput())
-            setResistance (resistance->value);
+        setResistance (resistance->value);
     };
     props.add (resistance);
 }
@@ -40,30 +38,29 @@ void ResistiveVs::setInput (bool input)
 
 void ResistiveVs::setVoltage (float voltageValue)
 {
-    if (auto vs = dynamic_cast<chowdsp::WDF::ResistiveVoltageSource<double>*> (wdf.get()))
-        vs->setVoltage (voltageValue);
+    if (resVs != nullptr)
+        resVs->setVoltage (voltageValue);
 }
 
 void ResistiveVs::setResistance (float resValue)
 {
-    if (auto vs = dynamic_cast<chowdsp::WDF::ResistiveVoltageSource<double>*> (wdf.get()))
-        vs->setResistanceValue (resValue);
+    if (resVs != nullptr)
+        resVs->setResistanceValue (resValue);
 }
 
 bool ResistiveVs::prepare (double sampleRate)
 {
-    bool result =  Leaf::prepare (sampleRate);
+    if (! Leaf::prepare (sampleRate))
+        return false;
 
-    if (result)
+    resVs = std::make_unique<chowdsp::WDF::ResistiveVoltageSource<double>> (resistance->value);
+    wdf = resVs.get();
+    setVoltage (voltage->value);
+
+    inputFunc = [=] (double x)
     {
-        wdf = std::make_unique<chowdsp::WDF::ResistiveVoltageSource<double>> (resistance->value);
-        setVoltage (voltage->value);
+        resVs->setVoltage (x);
+    };
 
-        inputFunc = [=] (double x)
-        {
-            dynamic_cast<chowdsp::WDF::ResistiveVoltageSource<double>*> (wdf.get())->setVoltage (x);
-        };
-    }
-
-    return result;
+    return true;
 }

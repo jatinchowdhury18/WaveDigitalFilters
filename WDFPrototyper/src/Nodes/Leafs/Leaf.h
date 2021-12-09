@@ -7,8 +7,8 @@
 class Leaf : public Node
 {
 public:
-    Leaf() {}
-    virtual ~Leaf();
+    Leaf() = default;
+    ~Leaf() override;
 
     bool getProbe() { return isProbe; }
     void setProbe (bool probe);

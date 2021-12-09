@@ -2,6 +2,8 @@
 #include "Leafs/Resistor.h"
 #include "Leafs/Capacitor.h"
 #include "Leafs/Inductor.h"
+#include "Leafs/ResistiveIs.h"
+#include "Leafs/ResistiveVs.h"
 
 Leaf::~Leaf()
 {
@@ -19,19 +21,23 @@ void Leaf::setProbe (bool probe)
 
 void Leaf::replaceNode (IDs::Leaf type)
 {
-    Node* newNode;
-    
+    std::unique_ptr<Node> newNode;
+
     if (type == IDs::Leaf::Resistor)
-        newNode = new Resistor;
+        newNode = std::unique_ptr<Resistor>();
     else if (type == IDs::Leaf::Capacitor)
-        newNode = new Capacitor;
+        newNode = std::unique_ptr<Capacitor>();
     else if (type == IDs::Leaf::Inductor)
-        newNode = new Inductor;
+        newNode = std::unique_ptr<Inductor>();
+    else if (type == IDs::Leaf::ResistiveVs)
+        newNode = std::make_unique<ResistiveVs>();
+    else if (type == IDs::Leaf::ResistiveIs)
+        newNode = std::make_unique<ResistiveIs>();
     else
     {
         jassertfalse;
         return;
     }
 
-    listeners.call (&Listener::replaceNode, this, newNode);
+    listeners.call (&Listener::replaceNode, this, newNode.release());
 }

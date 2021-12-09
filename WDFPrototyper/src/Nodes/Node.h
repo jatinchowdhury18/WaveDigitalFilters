@@ -10,13 +10,19 @@ using WDFNode = chowdsp::WDF::WDF<double>;
 
 class Node
 {
+    // clang-format off
     CREATE_LISTENER (
         Listener,
         listeners,
-        virtual void addNode (Node* /*node*/, Node* /*newNode*/) {} virtual void replaceNode (Node* /*oldNode*/, Node* /*newNode*/) {} virtual void changeProbe (Node* /*newProbe*/) {} virtual void changeInput (Node* /*newInput*/) {} virtual void unprepare() {})
+        virtual void addNode (Node* /*node*/, Node* /*newNode*/) {} \
+        virtual void replaceNode (Node* /*oldNode*/, Node* /*newNode*/) {} \
+        virtual void changeProbe (Node* /*newProbe*/) {} \
+        virtual void changeInput (Node* /*newInput*/) {} \
+        virtual void unprepare() {})
+    // clang-format on
 public:
-    Node() {}
-    virtual ~Node() {}
+    Node() = default;
+    virtual ~Node() = default;
 
     virtual Cell* getCell() { return cell.get(); }
 
@@ -29,7 +35,7 @@ public:
         return true;
     }
 
-    WDFNode* getWDF() { return wdf.get(); }
+    WDFNode* getWDF() { return wdf; }
 
     OwnedArray<Property>& getProps() { return props; }
 
@@ -39,7 +45,7 @@ protected:
 
     double fs = 44100.0;
 
-    std::unique_ptr<WDFNode> wdf;
+    WDFNode* wdf = nullptr;
 
     OwnedArray<Property> props;
 

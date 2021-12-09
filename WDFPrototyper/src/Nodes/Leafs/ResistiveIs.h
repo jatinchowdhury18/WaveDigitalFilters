@@ -9,7 +9,7 @@ class ResistiveIs : public Leaf,
 {
 public:
     ResistiveIs();
-    virtual ~ResistiveIs();
+    ~ResistiveIs() override;
 
     bool prepare (double sampleRate) override;
 
@@ -20,6 +20,8 @@ public:
 private:
     Property* current;
     Property* resistance;
+
+    std::unique_ptr<chowdsp::WDF::ResistiveCurrentSource<double>> resIs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ResistiveIs)
 };

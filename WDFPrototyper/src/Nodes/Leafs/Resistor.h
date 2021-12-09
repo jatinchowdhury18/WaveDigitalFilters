@@ -7,12 +7,14 @@ class Resistor : public Leaf
 {
 public:
     Resistor();
-    virtual ~Resistor() {}
+    ~Resistor() override = default;
 
     bool prepare (double sampleRate) override;
 
 private:
     Property* resistor;
+
+    std::unique_ptr<chowdsp::WDF::Resistor<double>> res;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Resistor)
 };

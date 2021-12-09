@@ -8,10 +8,11 @@ Parallel::Parallel()
 
 bool Parallel::prepare (double sampleRate)
 {
-    bool result = TwoPort::prepare (sampleRate);
+    if (! TwoPort::prepare (sampleRate))
+        return false;
 
-    if (result)
-        wdf = std::make_unique<chowdsp::WDF::WDFParallel<double>> (child[0]->getWDF(), child[1]->getWDF());
+    parallel = std::make_unique<chowdsp::WDF::WDFParallel<double>> (child[0]->getWDF(), child[1]->getWDF());
+    wdf = parallel.get();
 
-    return result;
+    return true;
 }

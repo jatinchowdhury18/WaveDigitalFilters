@@ -8,10 +8,11 @@ Inverter::Inverter()
 
 bool Inverter::prepare (double sampleRate)
 {
-    bool result = OnePort::prepare (sampleRate);
+    if (! OnePort::prepare (sampleRate))
+        return false;
 
-    if (result)
-        wdf = std::make_unique<chowdsp::WDF::PolarityInverter<double>> (child->getWDF());
+    inverter = std::make_unique<chowdsp::WDF::PolarityInverter<double>> (child->getWDF());
+    wdf = inverter.get();
 
-    return result;
+    return true;
 }
