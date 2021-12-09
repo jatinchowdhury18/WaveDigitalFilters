@@ -7,8 +7,8 @@
 class OnePort : public Node
 {
 public:
-    OnePort() {}
-    virtual ~OnePort() {}
+    OnePort() = default;
+    ~OnePort() override = default;
 
     Node* getChild() { return child.get(); }
 

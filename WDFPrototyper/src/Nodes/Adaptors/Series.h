@@ -7,11 +7,13 @@ class Series : public TwoPort
 {
 public:
     Series();
-    virtual ~Series() {}
+    ~Series() override = default;
 
     bool prepare (double sampleRate) override;
 
 private:
+    std::unique_ptr<chowdsp::WDF::WDFSeries<double>> series;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Series)
 };
 

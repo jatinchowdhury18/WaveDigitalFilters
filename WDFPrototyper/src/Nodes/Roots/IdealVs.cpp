@@ -1,8 +1,7 @@
 #include "IdealVs.h"
 #include "RootCells/IdealVsCell.h"
 
-IdealVs::IdealVs() :
-    voltage (new Property ({"Voltage", 0.0f, -20.0f, 20.0f}))
+IdealVs::IdealVs() : voltage (new Property ({ "Voltage", 0.0f, -20.0f, 20.0f }))
 {
     cell = std::make_unique<IdealVsCell> (*this);
 
@@ -33,33 +32,26 @@ void IdealVs::setInput (bool input)
 
 void IdealVs::setVoltage (float voltageValue)
 {
-    if (auto vs = dynamic_cast<chowdsp::WDF::IdealVoltageSource<double>*> (wdf.get()))
-        vs->setVoltage (voltageValue);
+    if (idealVs != nullptr)
+        idealVs->setVoltage (voltageValue);
 }
 
 bool IdealVs::prepare (double sampleRate)
 {
-    if (child == nullptr || child->getWDF() == nullptr)
+    if (child == nullptr)
         return false;
 
-    wdf = std::make_unique<chowdsp::WDF::IdealVoltageSource<double>> (child->getWDF());
+    if (! RootNode::prepare (sampleRate))
+        return false;
+
+    idealVs = std::make_unique<chowdsp::WDF::IdealVoltageSource<double>> (child->getWDF());
+    wdf = idealVs.get();
     setVoltage (voltage->value);
 
-    bool result = RootNode::prepare (sampleRate);
-
-    if (result)
+    inputFunc = [=] (double x)
     {
-        inputFunc = [=] (double x)
-        {
-            dynamic_cast<chowdsp::WDF::IdealVoltageSource<double>*> (wdf.get())->setVoltage (x);
-        };
-    }
+        idealVs->setVoltage (x);
+    };
 
-    return result;
-}
-
-void IdealVs::childUpdated()
-{
-    wdf = std::make_unique<chowdsp::WDF::IdealVoltageSource<double>> (child->getWDF());
-    setVoltage (voltage->value);
+    return true;
 }

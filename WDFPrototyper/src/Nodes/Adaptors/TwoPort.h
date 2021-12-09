@@ -7,8 +7,8 @@
 class TwoPort : public Node
 {
 public:
-    TwoPort() {}
-    virtual ~TwoPort() {}
+    TwoPort() = default;
+    ~TwoPort() override = default;
 
     Node* getChild (int idx) { return child[idx].get(); }
     Node* getChildReleased (int idx) { return child[idx].release(); }

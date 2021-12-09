@@ -8,10 +8,11 @@ Series::Series()
 
 bool Series::prepare (double sampleRate)
 {
-    bool result = TwoPort::prepare (sampleRate);
+    if (! TwoPort::prepare (sampleRate))
+        return false;
 
-    if (result)
-        wdf = std::make_unique<chowdsp::WDF::WDFSeries<double>> (child[0]->getWDF(), child[1]->getWDF());
+    series = std::make_unique<chowdsp::WDF::WDFSeries<double>> (child[0]->getWDF(), child[1]->getWDF());
+    wdf = series.get();
 
-    return result;
+    return true;
 }

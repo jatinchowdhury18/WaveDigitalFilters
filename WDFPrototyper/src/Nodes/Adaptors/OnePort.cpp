@@ -60,12 +60,11 @@ void OnePort::setChild (Node* newChild)
 
 bool OnePort::prepare (double sampleRate)
 {
-    bool result = Node::prepare (sampleRate);
+    if (! Node::prepare (sampleRate))
+        return false;
 
-    if (child.get() != nullptr)
-        result = child->prepare (sampleRate);
-    else
-        result = false;
+    if (child == nullptr)
+        return false;
 
-    return result;
+    return child->prepare (sampleRate);
 }

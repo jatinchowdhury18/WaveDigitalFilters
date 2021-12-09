@@ -77,14 +77,16 @@ void TwoPort::replaceNode (IDs::Adaptor type)
 
 bool TwoPort::prepare (double sampleRate)
 {
-    bool result = Node::prepare (sampleRate);
+    if (! Node::prepare (sampleRate))
+        return false;
 
-    for (int i = 0; (i < 2) && result; ++i)
+    bool result = true;
+    for (auto& childNode : child)
     {
-        if (child[i].get() != nullptr)
-            result = child[i]->prepare (sampleRate);
-        else
-            result = false;
+        if (childNode == nullptr)
+            return false;
+
+        result &= childNode->prepare (sampleRate);
     }
 
     return result;

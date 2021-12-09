@@ -7,11 +7,13 @@ class Inverter : public OnePort
 {
 public:
     Inverter();
-    virtual ~Inverter() {}
+    ~Inverter() override = default;
 
     bool prepare (double sampleRate) override;
 
 private:
+    std::unique_ptr<chowdsp::WDF::PolarityInverter<double>> inverter;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Inverter)
 };
 

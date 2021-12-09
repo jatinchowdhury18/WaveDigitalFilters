@@ -7,13 +7,12 @@ PropertiesComponent::PropertiesComponent (Node& node) :
 
     for (auto p : node.getProps())
     {
-        Label* pLabel = new Label;
+        auto pLabel = labels.add (std::make_unique<Label>());
         pLabel->setText (p->name, dontSendNotification);
         addAndMakeVisible (pLabel);
         pLabel->setInterceptsMouseClicks (false, false);
-        labels.add (pLabel);
 
-        auto pValLabel = values.add (new Label);
+        auto pValLabel = values.add (std::make_unique<Label>());
         addAndMakeVisible (pValLabel);
         pValLabel->setText (String (p->value, 3, true), dontSendNotification);
         pValLabel->setEditable (true);

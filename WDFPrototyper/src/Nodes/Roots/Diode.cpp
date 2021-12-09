@@ -9,7 +9,7 @@ Diode::Diode() : Is (new Property ({ "Saturation Current", (float) 2.52e-9, 0.0f
 
     auto updateParams = [=]
     {
-        if (auto* diode = dynamic_cast<chowdsp::WDF::Diode<double>*> (wdf.get()))
+        if (diode != nullptr)
             diode->setDiodeParameters ((double) Is->value, (double) vt->value, (double) numDiodes->value);
     };
 
@@ -28,15 +28,12 @@ Diode::Diode() : Is (new Property ({ "Saturation Current", (float) 2.52e-9, 0.0f
 
 bool Diode::prepare (double sampleRate)
 {
-    if (child == nullptr || child->getWDF() == nullptr)
+    if (child == nullptr)
         return false;
 
-    wdf = std::make_unique<chowdsp::WDF::Diode<double>> (child->getWDF(), (double) Is->value, (double) vt->value);
+    if (! RootNode::prepare (sampleRate))
+        return false;
 
-    return RootNode::prepare (sampleRate);
-}
-
-void Diode::childUpdated()
-{
-    wdf = std::make_unique<chowdsp::WDF::Diode<double>> (child->getWDF(), (double) Is->value, (double) vt->value);
+    diode = std::make_unique<chowdsp::WDF::Diode<double>> (child->getWDF(), (double) Is->value, (double) vt->value, (double) numDiodes->value);
+    wdf = diode.get();
 }

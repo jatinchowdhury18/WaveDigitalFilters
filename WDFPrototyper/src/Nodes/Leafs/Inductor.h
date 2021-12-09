@@ -7,12 +7,14 @@ class Inductor : public Leaf
 {
 public:
     Inductor();
-    virtual ~Inductor() {}
+    ~Inductor() override = default;
 
     bool prepare (double sampleRate) override;
 
 private:
     Property* inductance;
+
+    std::unique_ptr<chowdsp::WDF::Inductor<double>> ind;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Inductor)
 };

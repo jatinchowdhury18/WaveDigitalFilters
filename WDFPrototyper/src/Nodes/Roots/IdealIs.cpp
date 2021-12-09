@@ -1,8 +1,7 @@
 #include "IdealIs.h"
 #include "RootCells/IdealIsCell.h"
 
-IdealIs::IdealIs() :
-    current (new Property ({"Current", 0.0f, -1.0f, 1.0f}))
+IdealIs::IdealIs() : current (new Property ({ "Current", 0.0f, -1.0f, 1.0f }))
 {
     cell = std::make_unique<IdealIsCell> (*this);
 
@@ -33,33 +32,26 @@ void IdealIs::setInput (bool input)
 
 void IdealIs::setCurrent (float currentValue)
 {
-    if (auto is = dynamic_cast<chowdsp::WDF::IdealCurrentSource<double>*> (wdf.get()))
-        is->setCurrent (currentValue);
+    if (idealIs != nullptr)
+        idealIs->setCurrent (currentValue);
 }
 
 bool IdealIs::prepare (double sampleRate)
 {
-    if (child == nullptr || child->getWDF() == nullptr)
+    if (child == nullptr)
         return false;
 
-    wdf = std::make_unique<chowdsp::WDF::IdealCurrentSource<double>> (child->getWDF());
+    if (! RootNode::prepare (sampleRate))
+        return false;
+
+    idealIs = std::make_unique<chowdsp::WDF::IdealCurrentSource<double>> (child->getWDF());
+    wdf = idealIs.get();
     setCurrent (current->value);
 
-    bool result = RootNode::prepare (sampleRate);
-
-    if (result)
+    inputFunc = [=] (double x)
     {
-        inputFunc = [=] (double x)
-        {
-            dynamic_cast<chowdsp::WDF::IdealCurrentSource<double>*> (wdf.get())->setCurrent (x);
-        };
-    }
+        idealIs->setCurrent (x);
+    };
 
-    return result;
-}
-
-void IdealIs::childUpdated()
-{
-    wdf = std::make_unique<chowdsp::WDF::IdealCurrentSource<double>> (child->getWDF());
-    setCurrent (current->value);
+    return true;
 }
