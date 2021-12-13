@@ -1,7 +1,6 @@
 #pragma once
 
-#include "BaxandallBass.h"
-#include "BaxandallTreble.h"
+#include "BaxandallWDF.h"
 
 class BaxandallEqAudioProcessor : public chowdsp::PluginBase<BaxandallEqAudioProcessor>
 {
@@ -20,8 +19,10 @@ private:
     std::atomic<float>* bassParam = nullptr;
     std::atomic<float>* trebleParam = nullptr;
 
-    BaxandallBass bBass[2];
-    BaxandallTreble bTreble[2];
+    SmoothedValue<float, ValueSmoothingTypes::Linear> bassSmooth[2];
+    SmoothedValue<float, ValueSmoothingTypes::Linear> trebleSmooth[2];
+
+    BaxandallWDF wdfCircuit[2];
 
     dsp::Oversampling<float> oversampling { 2, 1, dsp::Oversampling<float>::filterHalfBandPolyphaseIIR };
 

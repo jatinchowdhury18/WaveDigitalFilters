@@ -1,5 +1,14 @@
 #include "PluginProcessor.h"
 
+namespace
+{
+float skewParam (float val)
+{
+    val = std::pow (val, 3.333f);
+    return jlimit (0.01f, 0.99f, 1.0f - val);
+}
+} // namespace
+
 BaxandallEqAudioProcessor::BaxandallEqAudioProcessor()
 {
     bassParam = vts.getRawParameterValue ("bass");
@@ -18,22 +27,22 @@ void BaxandallEqAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     oversampling.initProcessing (samplesPerBlock);
 
+    const auto osSampleRate = sampleRate + oversampling.getOversamplingFactor();
     for (int ch = 0; ch < 2; ++ch)
     {
-        bBass[ch].prepare (sampleRate * oversampling.getOversamplingFactor());
-        bTreble[ch].prepare (sampleRate * oversampling.getOversamplingFactor());
+        wdfCircuit[ch].prepare (osSampleRate);
+
+        bassSmooth[ch].reset (osSampleRate, 0.05);
+        bassSmooth[ch].setCurrentAndTargetValue (skewParam (*bassParam));
+
+        trebleSmooth[ch].reset (osSampleRate, 0.05);
+        trebleSmooth[ch].setCurrentAndTargetValue (skewParam (*trebleParam));
     }
 }
 
 void BaxandallEqAudioProcessor::releaseResources()
 {
     oversampling.reset();
-
-    for (int ch = 0; ch < 2; ++ch)
-    {
-        bBass[ch].reset();
-        bTreble[ch].reset();
-    }
 }
 
 void BaxandallEqAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
@@ -43,20 +52,33 @@ void BaxandallEqAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
 
     osBlock = oversampling.processSamplesUp (block);
 
+    const int numSamples = (int) osBlock.getNumSamples();
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
-        bBass[ch].setBass (*bassParam);
-        bTreble[ch].setTreble (*trebleParam);
+        bassSmooth[ch].setTargetValue (skewParam (*bassParam));
+        trebleSmooth[ch].setTargetValue (skewParam (*trebleParam));
 
-        auto* x = osBlock.getChannelPointer (ch);
-
-        for (int n = 0; n < (int) osBlock.getNumSamples(); ++n)
+        auto* x = osBlock.getChannelPointer ((size_t) ch);
+        if (bassSmooth[ch].isSmoothing() || trebleSmooth[ch].isSmoothing())
         {
-            x[n] = bBass[ch].processSample (x[n]) + bTreble[ch].processSample (x[n]);
+            for (int n = 0; n < numSamples; ++n)
+            {
+                wdfCircuit[ch].setParams (bassSmooth[ch].getNextValue(), trebleSmooth[ch].getNextValue());
+                x[n] = wdfCircuit[ch].processSample (x[n]);
+            }
+        }
+        else
+        {
+            wdfCircuit[ch].setParams (bassSmooth[ch].getNextValue(), trebleSmooth[ch].getNextValue());
+
+            for (int n = 0; n < numSamples; ++n)
+                x[n] = wdfCircuit[ch].processSample (x[n]);
         }
     }
 
     oversampling.processSamplesDown (block);
+
+    buffer.applyGain (Decibels::decibelsToGain (21.0f));
 }
 
 AudioProcessorEditor* BaxandallEqAudioProcessor::createEditor()
