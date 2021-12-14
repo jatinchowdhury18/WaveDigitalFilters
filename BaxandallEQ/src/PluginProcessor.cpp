@@ -13,6 +13,7 @@ BaxandallEqAudioProcessor::BaxandallEqAudioProcessor()
 {
     bassParam = vts.getRawParameterValue ("bass");
     trebleParam = vts.getRawParameterValue ("treble");
+    wdfParam = vts.getRawParameterValue ("wdf_choice");
 }
 
 void BaxandallEqAudioProcessor::addParameters (Parameters& params)
@@ -21,16 +22,20 @@ void BaxandallEqAudioProcessor::addParameters (Parameters& params)
 
     params.push_back (std::make_unique<VTSParam> ("bass", "Bass", String(), NormalisableRange { 0.0f, 1.0f }, 0.5f, &percentValToString, &stringToPercentVal));
     params.push_back (std::make_unique<VTSParam> ("treble", "Treble", String(), NormalisableRange { 0.0f, 1.0f }, 0.5f, &percentValToString, &stringToPercentVal));
+    params.push_back (std::make_unique<AudioParameterChoice> ("wdf_choice", "WDF", StringArray { "Unadapted R-Type", "Adapted R-Type" }, 0));
 }
 
 void BaxandallEqAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     oversampling.initProcessing (samplesPerBlock);
 
-    const auto osSampleRate = sampleRate + oversampling.getOversamplingFactor();
+    prevWDF = (int) *wdfParam;
+
+    const auto osSampleRate = sampleRate * oversampling.getOversamplingFactor();
     for (int ch = 0; ch < 2; ++ch)
     {
-        wdfCircuit[ch].prepare (osSampleRate);
+        wdfUnadapted[ch].prepare (osSampleRate);
+        wdfAdapted[ch].prepare (osSampleRate);
 
         bassSmooth[ch].reset (osSampleRate, 0.05);
         bassSmooth[ch].setCurrentAndTargetValue (skewParam (*bassParam));
@@ -47,6 +52,37 @@ void BaxandallEqAudioProcessor::releaseResources()
 
 void BaxandallEqAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
 {
+    int wdfType = (int) *wdfParam;
+    if (wdfType != prevWDF)
+    {
+        for (int ch = 0; ch < 2; ++ch)
+        {
+            wdfUnadapted[ch].reset();
+            wdfAdapted[ch].reset();
+        }
+
+        prevWDF = wdfType;
+    }
+
+    auto procWDFChannel = [=] (auto& wdf, float* x, int numSamples, int ch)
+    {
+        if (bassSmooth[ch].isSmoothing() || trebleSmooth[ch].isSmoothing())
+        {
+            for (int n = 0; n < numSamples; ++n)
+            {
+                wdf[ch].setParams (bassSmooth[ch].getNextValue(), trebleSmooth[ch].getNextValue());
+                x[n] = wdf[ch].processSample (x[n]);
+            }
+        }
+        else
+        {
+            wdf[ch].setParams (bassSmooth[ch].getNextValue(), trebleSmooth[ch].getNextValue());
+
+            for (int n = 0; n < numSamples; ++n)
+                x[n] = wdf[ch].processSample (x[n]);
+        }
+    };
+
     dsp::AudioBlock<float> block (buffer);
     dsp::AudioBlock<float> osBlock (buffer);
 
@@ -59,21 +95,10 @@ void BaxandallEqAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
         trebleSmooth[ch].setTargetValue (skewParam (*trebleParam));
 
         auto* x = osBlock.getChannelPointer ((size_t) ch);
-        if (bassSmooth[ch].isSmoothing() || trebleSmooth[ch].isSmoothing())
-        {
-            for (int n = 0; n < numSamples; ++n)
-            {
-                wdfCircuit[ch].setParams (bassSmooth[ch].getNextValue(), trebleSmooth[ch].getNextValue());
-                x[n] = wdfCircuit[ch].processSample (x[n]);
-            }
-        }
+        if (wdfType == 0)
+            procWDFChannel (wdfUnadapted, x, numSamples, ch);
         else
-        {
-            wdfCircuit[ch].setParams (bassSmooth[ch].getNextValue(), trebleSmooth[ch].getNextValue());
-
-            for (int n = 0; n < numSamples; ++n)
-                x[n] = wdfCircuit[ch].processSample (x[n]);
-        }
+            procWDFChannel (wdfAdapted, x, numSamples, ch);
     }
 
     oversampling.processSamplesDown (block);

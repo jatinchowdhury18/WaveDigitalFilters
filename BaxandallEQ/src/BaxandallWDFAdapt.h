@@ -8,10 +8,10 @@ namespace wdft = chowdsp::WDFT;
  * Implentation based on Werner et. al:
  * https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8371321
  */
-class BaxandallWDF
+class BaxandallWDFAdapt
 {
 public:
-    BaxandallWDF();
+    BaxandallWDFAdapt();
 
     void prepare (double fs);
     void reset();
@@ -20,7 +20,9 @@ public:
     inline float processSample (float x)
     {
         Vin.setVoltage (x);
-        R.compute();
+
+        Vin.incident (S1.reflected());
+        S1.incident (Vin.reflected());
 
         return wdft::voltage<float> (Rl);
     }
@@ -62,13 +64,14 @@ private:
     wdft::ResistorT<float> Resa { 10.0e3f };
     wdft::WDFSeriesT<float, decltype (Resa), decltype (P2)> S2 { Resa, P2 };
 
+    // R-Adaptor
+    using RType = wdft::RtypeAdaptor<float, 5, decltype (S4), decltype (P1), decltype (Resc), decltype (S3), decltype (S2)>;
+    RType R { std::tie (S4, P1, Resc, S3, S2) };
+
     // Port F
-    wdft::ResistiveVoltageSourceT<float> Vin; // @TODO make this ideal when we make the R-node adaptable
     wdft::CapacitorT<float> Ca { 1.0e-6f };
-    wdft::WDFSeriesT<float, decltype (Vin), decltype (Ca)> S1 { Vin, Ca };
+    wdft::WDFSeriesT<float, decltype (R), decltype (Ca)> S1 { R, Ca };
+    wdft::IdealVoltageSourceT<float, decltype (S1)> Vin { S1 };
 
-    using RType = wdft::RootRtypeAdaptor<float, decltype (S4), decltype (P1), decltype (Resc), decltype (S3), decltype (S2), decltype (S1)>;
-    RType R { std::tie (S4, P1, Resc, S3, S2, S1) };
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BaxandallWDF)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BaxandallWDFAdapt)
 };
