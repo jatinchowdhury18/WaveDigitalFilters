@@ -25,6 +25,15 @@ public:
         C59.reset();
     }
 
+    void setParameters (float freqHz, float Rmult01)
+    {
+        constexpr auto Rfb = 1.0e6f;
+        const auto Rg = 250.0f * std::pow (2500.0f / 250.0f, Rmult01);
+        float C = 1.0f / (MathConstants<float>::twoPi * freqHz * std::sqrt (Rfb * Rg));
+
+        setParameters (Rfb, Rg, C);
+    }
+
     void setParameters (float Rfb, float Rg, float Cval)
     {
         R197.setResistanceValue (Rfb);

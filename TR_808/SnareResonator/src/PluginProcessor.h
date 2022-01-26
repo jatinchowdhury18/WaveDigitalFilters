@@ -16,9 +16,8 @@ public:
     AudioProcessorEditor* createEditor() override;
 
 private:
-    std::atomic<float>* RfbParam = nullptr;
-    std::atomic<float>* RgParam = nullptr;
-    std::atomic<float>* CParam = nullptr;
+    std::atomic<float>* freqHzParam = nullptr;
+    std::atomic<float>* resParam = nullptr;
 
     SnareResonatorWDF wdf[2];
 

@@ -2,18 +2,16 @@
 
 SnareResonatorAudioProcessor::SnareResonatorAudioProcessor()
 {
-    RfbParam = vts.getRawParameterValue ("r_fb");
-    RgParam = vts.getRawParameterValue ("r_g");
-    CParam = vts.getRawParameterValue ("c");
+    freqHzParam = vts.getRawParameterValue ("freq");
+    resParam = vts.getRawParameterValue ("res");
 }
 
 void SnareResonatorAudioProcessor::addParameters (Parameters& params)
 {
     using namespace chowdsp::ParamUtils;
 
-    emplace_param<VTSParam> (params, "r_fb", "R_fb [kOhms]", String(), NormalisableRange { 100.0f, 1000.0f }, 800.0f, &floatValToString, &stringToFloatVal);
-    emplace_param<VTSParam> (params, "r_g", "R_g [Ohms]", String(), NormalisableRange { 500.0f, 5000.0f }, 600.0f, &floatValToString, &stringToFloatVal);
-    emplace_param<VTSParam> (params, "c", "C [nF]", String(), NormalisableRange { 5.0f, 50.0f }, 20.0f, &floatValToString, &stringToFloatVal);
+    createFreqParameter (params, "freq", "Freq", 80.0f, 2000.0f, 200.0f, 200.0f);
+    createPercentParameter (params, "res", "Res.", 0.5f);
 }
 
 void SnareResonatorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -42,7 +40,7 @@ void SnareResonatorAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer
 
     for (int ch = 0; ch < osBuffer.getNumChannels(); ++ch)
     {
-        wdf[ch].setParameters (*RfbParam * 1.0e3f, *RgParam, *CParam * 1.0e-9f);
+        wdf[ch].setParameters (*freqHzParam, *resParam);
 
         auto* x = osBuffer.getWritePointer (ch);
         for (int n = 0; n < osBuffer.getNumSamples(); ++n)
