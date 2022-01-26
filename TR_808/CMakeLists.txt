@@ -1,2 +1,3 @@
 add_subdirectory(OutputFilter)
 add_subdirectory(PulseShaper)
+add_subdirectory(SnareResonator)
