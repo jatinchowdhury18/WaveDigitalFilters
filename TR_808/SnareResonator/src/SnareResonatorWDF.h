@@ -57,10 +57,10 @@ private:
     wdft::ResistorT<float> R197 { 820.0e3f };
 
     // Port C
-    wdft::CapacitorT<float> C58 { 0.027e-6f, 48000.0f };
+    wdft::CapacitorT<float> C58 { 0.027e-6f };
 
     // Port D
-    wdft::CapacitorT<float> C59 { 0.027e-6f, 48000.0f };
+    wdft::CapacitorT<float> C59 { 0.027e-6f };
 
     // Port E
     wdft::ResistorT<float> R196 { 680.0f };
@@ -92,7 +92,7 @@ private:
     RType R { std::tie (R197, C58, C59, R196) };
 
     // Port A
-    wdft::IdealVoltageSourceT<float, decltype (R)> Vin { R };
+    wdft::IdealVoltageSourceT<float, RType> Vin { R };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SnareResonatorWDF)
 };
