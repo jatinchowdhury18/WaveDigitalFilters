@@ -5,8 +5,8 @@
 namespace wdft = chowdsp::WDFT;
 
 /**
- * Resonator from TR-808 snare drum circuit.
- * Reference: http://www.ericarcher.net/wp-content/uploads/2014/07/tr808_snare_diy_project.pdf
+ * Resonator from TR-808 hi-hat circuit.
+ * Reference: http://www.ericarcher.net/wp-content/uploads/2014/07/tr-808-hihat-diy-project-revised-dec-2009.pdf (page 3)
  */
 class HatResonatorWDF
 {
