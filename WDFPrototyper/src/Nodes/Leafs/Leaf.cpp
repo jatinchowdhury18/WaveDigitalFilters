@@ -1,9 +1,9 @@
 #include "Leafs/Leaf.h"
-#include "Leafs/Resistor.h"
 #include "Leafs/Capacitor.h"
 #include "Leafs/Inductor.h"
 #include "Leafs/ResistiveIs.h"
 #include "Leafs/ResistiveVs.h"
+#include "Leafs/Resistor.h"
 
 Leaf::~Leaf()
 {
@@ -24,11 +24,11 @@ void Leaf::replaceNode (IDs::Leaf type)
     std::unique_ptr<Node> newNode;
 
     if (type == IDs::Leaf::Resistor)
-        newNode = std::unique_ptr<Resistor>();
+        newNode = std::make_unique<Resistor>();
     else if (type == IDs::Leaf::Capacitor)
-        newNode = std::unique_ptr<Capacitor>();
+        newNode = std::make_unique<Capacitor>();
     else if (type == IDs::Leaf::Inductor)
-        newNode = std::unique_ptr<Inductor>();
+        newNode = std::make_unique<Inductor>();
     else if (type == IDs::Leaf::ResistiveVs)
         newNode = std::make_unique<ResistiveVs>();
     else if (type == IDs::Leaf::ResistiveIs)

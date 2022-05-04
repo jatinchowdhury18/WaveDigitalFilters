@@ -7,18 +7,18 @@
 class CapacitorCell : public LeafCell
 {
 public:
-    CapacitorCell (Capacitor& node) :
-        LeafCell (node),
-        node (node)
-    {}
-    virtual ~CapacitorCell() {}
-
-    void paint (Graphics& g) override
+    explicit CapacitorCell (Capacitor& node) : LeafCell (node),
+                                               node (node)
     {
-        g.fillAll (node.getProbe() ? Colours::greenyellow : Colours::white);
+    }
+    ~CapacitorCell() override = default;
 
-        g.setColour (Colours::black);
-        g.drawFittedText ("Cap", getLocalBounds(), Justification::centred, 1);
+    void paint (juce::Graphics& g) override
+    {
+        g.fillAll (node.getProbe() ? juce::Colours::greenyellow : juce::Colours::white);
+
+        g.setColour (juce::Colours::black);
+        g.drawFittedText ("Cap", getLocalBounds(), juce::Justification::centred, 1);
     }
 
 private:

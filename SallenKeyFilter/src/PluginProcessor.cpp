@@ -12,8 +12,8 @@ void SallenKeyFilterAudioProcessor::addParameters (Parameters& params)
     using namespace chowdsp::ParamUtils;
 
     createFreqParameter (params, "freq", "Frequency", 20.0f, 20000.0f, 2000.0f, 2000.0f);
-    emplace_param<VTSParam> (params, "q_val", "Q", String(), createNormalisableRange (0.2f, 10.0f, 0.7071f), 0.7071f, &floatValToString, &stringToFloatVal);
-    emplace_param<AudioParameterChoice> (params, "filter_choice", "Type", StringArray { "LPF", "HPF", "BPF" }, 0);
+    emplace_param<VTSParam> (params, "q_val", "Q", juce::String(), createNormalisableRange (0.2f, 10.0f, 0.7071f), 0.7071f, &floatValToString, &stringToFloatVal);
+    emplace_param<juce::AudioParameterChoice> (params, "filter_choice", "Type", juce::StringArray { "LPF", "HPF", "BPF" }, 0);
 }
 
 void SallenKeyFilterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -34,12 +34,11 @@ void SallenKeyFilterAudioProcessor::releaseResources()
 {
 }
 
-void SallenKeyFilterAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
+void SallenKeyFilterAudioProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
 {
-    dsp::AudioBlock<float> block (buffer);
-    dsp::AudioBlock<float> osBlock (buffer);
+    juce::dsp::AudioBlock<float> block (buffer);
 
-    osBlock = oversampling.processSamplesUp (block);
+    auto&& osBlock = oversampling.processSamplesUp (block);
 
     const int numSamples = (int) osBlock.getNumSamples();
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
@@ -47,7 +46,7 @@ void SallenKeyFilterAudioProcessor::processAudioBlock (AudioBuffer<float>& buffe
         freqSmooth[ch].setTargetValue (*freqParam);
         qSmooth[ch].setTargetValue (*qParam);
 
-        auto* x = osBlock.getChannelPointer (ch);
+        auto* x = osBlock.getChannelPointer ((size_t) ch);
         if (freqSmooth[ch].isSmoothing() || qSmooth[ch].isSmoothing())
         {
             for (int n = 0; n < numSamples; ++n)
@@ -68,13 +67,13 @@ void SallenKeyFilterAudioProcessor::processAudioBlock (AudioBuffer<float>& buffe
     oversampling.processSamplesDown (block);
 }
 
-AudioProcessorEditor* SallenKeyFilterAudioProcessor::createEditor()
+juce::AudioProcessorEditor* SallenKeyFilterAudioProcessor::createEditor()
 {
-    return new GenericAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 // This creates new instances of the plugin..
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SallenKeyFilterAudioProcessor();
 }

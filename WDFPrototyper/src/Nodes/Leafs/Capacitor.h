@@ -14,7 +14,7 @@ public:
 private:
     Property* capacitance;
 
-    std::unique_ptr<chowdsp::WDF::Capacitor<double>> cap;
+    std::unique_ptr<chowdsp::wdf::Capacitor<double>> cap;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Capacitor)
 };

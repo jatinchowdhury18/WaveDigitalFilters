@@ -1,23 +1,23 @@
 #ifndef INVERTERCELL_H_INCLUDED
 #define INVERTERCELL_H_INCLUDED
 
-#include "OnePortCell.h"
 #include "Adaptors/Inverter.h"
+#include "OnePortCell.h"
 
 class InverterCell : public OnePortCell
 {
 public:
-    InverterCell (Inverter& node) :
-        OnePortCell (node),
-        node (node)
-    {}
-
-    void paint (Graphics& g) override
+    explicit InverterCell (Inverter& node) : OnePortCell (node),
+                                             node (node)
     {
-        g.fillAll (Colours::white);
+    }
 
-        g.setColour (Colours::black);
-        g.drawFittedText ("Inv", getLocalBounds(), Justification::centred, 1);
+    void paint (juce::Graphics& g) override
+    {
+        g.fillAll (juce::Colours::white);
+
+        g.setColour (juce::Colours::black);
+        g.drawFittedText ("Inv", getLocalBounds(), juce::Justification::centred, 1);
     }
 
 private:

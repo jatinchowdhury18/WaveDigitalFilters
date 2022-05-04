@@ -2,24 +2,22 @@
 
 DiodeClipperAudioProcessor::DiodeClipperAudioProcessor()
 {
-    freqParam    = vts.getRawParameterValue ("fc");
-    gainDBParam  = vts.getRawParameterValue ("gain");
-    outDBParam   = vts.getRawParameterValue ("out");
-    capLeakParam = vts.getRawParameterValue ("leak");
+    freqParam = vts.getRawParameterValue ("fc");
+    gainDBParam = vts.getRawParameterValue ("gain");
+    outDBParam = vts.getRawParameterValue ("out");
 }
 
 void DiodeClipperAudioProcessor::addParameters (Parameters& params)
 {
     using namespace chowdsp::ParamUtils;
 
-    NormalisableRange<float>
+    juce::NormalisableRange<float>
         fcRange (20.0f, 20000.0f);
     fcRange.setSkewForCentre (1000.0f);
 
-    params.push_back (std::make_unique<VTSParam> ("fc", "Cutoff [Hz]", String(), fcRange, 1000.0f, &freqValToString, &stringToFreqVal));
-    params.push_back (std::make_unique<VTSParam> ("gain", "Gain [dB]", String(), NormalisableRange { 0.0f, 30.0f }, 0.0f, &gainValToString, &stringToGainVal));
-    params.push_back (std::make_unique<VTSParam> ("out", "Out Gain [dB]", String(), NormalisableRange { -30.f, 30.0f }, 0.0f, &gainValToString, &stringToGainVal));
-    //    params.push_back (std::make_unique<VTSParam> ("leak", "Cap Leakage", 0.0f, 1.0f, 0.0f));
+    params.push_back (std::make_unique<VTSParam> ("fc", "Cutoff [Hz]", juce::String(), fcRange, 1000.0f, &freqValToString, &stringToFreqVal));
+    params.push_back (std::make_unique<VTSParam> ("gain", "Gain [dB]", juce::String(), juce::NormalisableRange { 0.0f, 30.0f }, 0.0f, &gainValToString, &stringToGainVal));
+    params.push_back (std::make_unique<VTSParam> ("out", "Out Gain [dB]", juce::String(), juce::NormalisableRange { -30.f, 30.0f }, 0.0f, &gainValToString, &stringToGainVal));
 }
 
 void DiodeClipperAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -29,10 +27,10 @@ void DiodeClipperAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     for (int ch = 0; ch < 2; ++ch)
         diodeClipper[ch].prepare (sampleRate);
 
-    curGain = Decibels::decibelsToGain (gainDBParam->load());
+    curGain = juce::Decibels::decibelsToGain (gainDBParam->load());
     oldGain = curGain;
 
-    curOutGain = Decibels::decibelsToGain (outDBParam->load());
+    curOutGain = juce::Decibels::decibelsToGain (outDBParam->load());
     oldOutGain = curOutGain;
 }
 
@@ -44,10 +42,10 @@ void DiodeClipperAudioProcessor::releaseResources()
         diodeClipper[ch].reset();
 }
 
-void DiodeClipperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
+void DiodeClipperAudioProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
 {
     // Input gain stage
-    curGain = Decibels::decibelsToGain (gainDBParam->load());
+    curGain = juce::Decibels::decibelsToGain (gainDBParam->load());
 
     if (oldGain == curGain)
     {
@@ -59,25 +57,22 @@ void DiodeClipperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
         oldGain = curGain;
     }
 
-    dsp::AudioBlock<float> block (buffer);
-    auto osBlock = oversampling.processSamplesUp (block);
+    juce::dsp::AudioBlock<float> block (buffer);
+    auto&& osBlock = oversampling.processSamplesUp (block);
 
-    float* ptrArray[] = {osBlock.getChannelPointer (0), osBlock.getChannelPointer (1)};
-    AudioBuffer<float> osBuffer (ptrArray, 2, static_cast<int> (osBlock.getNumSamples()));
-
-    for (int ch = 0; ch < osBuffer.getNumChannels(); ++ch)
+    for (size_t ch = 0; ch < osBlock.getNumChannels(); ++ch)
     {
         diodeClipper[ch].setCircuitParams (*freqParam);
-        auto* x = osBuffer.getWritePointer (ch);
+        auto* x = osBlock.getChannelPointer (ch);
 
-        for (int n = 0; n < osBuffer.getNumSamples(); ++n)
+        for (int n = 0; n < (int) osBlock.getNumSamples(); ++n)
             x[n] = diodeClipper[ch].processSample (x[n]);
     }
 
     oversampling.processSamplesDown (block);
 
     // Output gain stage
-    curOutGain = Decibels::decibelsToGain (outDBParam->load());
+    curOutGain = juce::Decibels::decibelsToGain (outDBParam->load());
 
     if (oldOutGain == curOutGain)
     {
@@ -90,13 +85,13 @@ void DiodeClipperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
     }
 }
 
-AudioProcessorEditor* DiodeClipperAudioProcessor::createEditor()
+juce::AudioProcessorEditor* DiodeClipperAudioProcessor::createEditor()
 {
-    return new GenericAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 // This creates new instances of the plugin..
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new DiodeClipperAudioProcessor();
 }

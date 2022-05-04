@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
+
 #include "SnareResonatorWDF.h"
 
 class SnareResonatorAudioProcessor : public chowdsp::PluginBase<SnareResonatorAudioProcessor>
@@ -11,9 +13,9 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processAudioBlock (AudioBuffer<float>&) override;
+    void processAudioBlock (juce::AudioBuffer<float>&) override;
 
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
 private:
     std::atomic<float>* freqHzParam = nullptr;
@@ -21,7 +23,7 @@ private:
 
     SnareResonatorWDF wdf[2];
 
-    dsp::Oversampling<float> oversampling { 2, 1, dsp::Oversampling<float>::filterHalfBandPolyphaseIIR };
+    juce::dsp::Oversampling<float> oversampling { 2, 1, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SnareResonatorAudioProcessor)
 };

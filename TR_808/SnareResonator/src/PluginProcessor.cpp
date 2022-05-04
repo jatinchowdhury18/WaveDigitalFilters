@@ -30,33 +30,30 @@ void SnareResonatorAudioProcessor::releaseResources()
         wdf[ch].reset();
 }
 
-void SnareResonatorAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
+void SnareResonatorAudioProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
 {
-    dsp::AudioBlock<float> block (buffer);
+    juce::dsp::AudioBlock<float> block (buffer);
     auto&& osBlock = oversampling.processSamplesUp (block);
 
-    float* ptrArray[] = { osBlock.getChannelPointer (0), osBlock.getChannelPointer (1) };
-    AudioBuffer<float> osBuffer (ptrArray, 2, static_cast<int> (osBlock.getNumSamples()));
-
-    for (int ch = 0; ch < osBuffer.getNumChannels(); ++ch)
+    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
         wdf[ch].setParameters (*freqHzParam, *resParam);
 
-        auto* x = osBuffer.getWritePointer (ch);
-        for (int n = 0; n < osBuffer.getNumSamples(); ++n)
+        auto* x = osBlock.getChannelPointer ((size_t) ch);
+        for (int n = 0; n < (int) osBlock.getNumSamples(); ++n)
             x[n] = wdf[ch].processSample (x[n]);
     }
 
     oversampling.processSamplesDown (block);
 }
 
-AudioProcessorEditor* SnareResonatorAudioProcessor::createEditor()
+juce::AudioProcessorEditor* SnareResonatorAudioProcessor::createEditor()
 {
-    return new GenericAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 // This creates new instances of the plugin..
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SnareResonatorAudioProcessor();
 }

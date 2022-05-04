@@ -1,8 +1,9 @@
 #pragma once
 
-#include <JuceHeader.h>
+#include <chowdsp_dsp/chowdsp_dsp.h>
+#include <chowdsp_wdf/chowdsp_wdf.h>
 
-namespace wdft = chowdsp::WDFT;
+namespace wdft = chowdsp::wdft;
 
 /**
  * Resonator from TR-808 snare drum circuit.
@@ -29,7 +30,7 @@ public:
     {
         constexpr auto Rfb = 82.0e3f;
         const auto R_g = 100.0f * std::pow (10000.0f / 100.0f, std::pow (Rmult01, 0.37f));
-        float C = 1.0f / (MathConstants<float>::twoPi * freqHz * std::sqrt (Rfb * R_g));
+        float C = 1.0f / (juce::MathConstants<float>::twoPi * freqHz * std::sqrt (Rfb * R_g));
 
         setParameters (Rfb, R_g, C);
     }

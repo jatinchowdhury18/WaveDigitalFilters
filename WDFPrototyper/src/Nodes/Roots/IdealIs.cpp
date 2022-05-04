@@ -44,7 +44,7 @@ bool IdealIs::prepare (double sampleRate)
     if (! RootNode::prepare (sampleRate))
         return false;
 
-    idealIs = std::make_unique<chowdsp::WDF::IdealCurrentSource<double>> (child->getWDF());
+    idealIs = std::make_unique<chowdsp::wdf::IdealCurrentSource<double>> (child->getWDF());
     wdf = idealIs.get();
     setCurrent (current->value);
 

@@ -19,7 +19,7 @@ public:
 private:
     Property* current;
 
-    std::unique_ptr<chowdsp::WDF::IdealCurrentSource<double>> idealIs;
+    std::unique_ptr<chowdsp::wdf::IdealCurrentSource<double>> idealIs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (IdealIs)
 };

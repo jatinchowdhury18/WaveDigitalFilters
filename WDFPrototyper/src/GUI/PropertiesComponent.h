@@ -3,23 +3,23 @@
 
 #include "Node.h"
 
-class PropertiesComponent : public Component
+class PropertiesComponent : public juce::Component
 {
 public:
-    PropertiesComponent (Node& node);
+    explicit PropertiesComponent (Node& node);
 
-    void paint (Graphics& g) override;
+    void paint (juce::Graphics& g) override;
     void resized() override;
 
-    void mouseDrag (const MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
 
 private:
     Node& node;
 
-    OwnedArray<Label> labels;
-    OwnedArray<Label> values;
+    juce::OwnedArray<juce::Label> labels;
+    juce::OwnedArray<juce::Label> values;
 
-    TextButton enter { "Enter" };
+    juce::TextButton enter { "Enter" };
 
     bool shouldMove = false;
 

@@ -1,9 +1,9 @@
 #ifndef TR808OUTPUTFILTER_H_INCLUDED
 #define TR808OUTPUTFILTER_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <chowdsp_wdf/chowdsp_wdf.h>
 
-using namespace chowdsp::WDFT;
+using namespace chowdsp::wdft;
 
 class OutputFilter
 {

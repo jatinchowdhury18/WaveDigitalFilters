@@ -14,7 +14,7 @@ public:
 private:
     Property* resistor;
 
-    std::unique_ptr<chowdsp::WDF::Resistor<double>> res;
+    std::unique_ptr<chowdsp::wdf::Resistor<double>> res;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Resistor)
 };

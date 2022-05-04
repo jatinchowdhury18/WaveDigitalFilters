@@ -2,7 +2,7 @@
 #include "RootCells/RootCell.h"
 
 WdfprototyperAudioProcessorEditor::WdfprototyperAudioProcessorEditor (WdfprototyperAudioProcessor& p)
-    : AudioProcessorEditor (&p), proc (p)
+    : juce::AudioProcessorEditor (&p), proc (p)
 {
     setSize (600, 600);
 
@@ -49,18 +49,18 @@ void WdfprototyperAudioProcessorEditor::refresh (Node* node, int center)
     else if (auto twoPortNode = dynamic_cast<TwoPort*> (node))
     {
         refresh (twoPortNode->getChild (0), -1);
-        refresh (twoPortNode->getChild (1),  1);
+        refresh (twoPortNode->getChild (1), 1);
     }
 }
 
-void WdfprototyperAudioProcessorEditor::paint (Graphics& g)
+void WdfprototyperAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll (Colours::black);
+    g.fillAll (juce::Colours::black);
 
     paintConnectionTree (proc.root.get(), g);
 }
 
-void WdfprototyperAudioProcessorEditor::paintConnectionTree (Node* node, Graphics& g)
+void WdfprototyperAudioProcessorEditor::paintConnectionTree (Node* node, juce::Graphics& g)
 {
     if (node == nullptr)
         return;
@@ -76,7 +76,7 @@ void WdfprototyperAudioProcessorEditor::paintConnectionTree (Node* node, Graphic
     auto start = node->getCell()->getBounds().toFloat().getCentre();
     auto end = node->getParent()->getCell()->getBounds().toFloat().getCentre();
 
-    g.setColour (Colours::yellow);
+    g.setColour (juce::Colours::yellow);
     g.drawLine (start.x, start.y, end.x, end.y);
 
     // recurse
@@ -120,7 +120,7 @@ Node* getNodeForCell (Cell* cell, Node* startNode)
     return nullptr;
 }
 
-void WdfprototyperAudioProcessorEditor::changeListenerCallback (ChangeBroadcaster* source)
+void WdfprototyperAudioProcessorEditor::changeListenerCallback (juce::ChangeBroadcaster* source)
 {
     if (auto cellCast = dynamic_cast<Cell*> (source))
     {

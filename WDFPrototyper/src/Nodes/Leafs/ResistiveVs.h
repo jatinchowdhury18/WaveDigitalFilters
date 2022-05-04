@@ -21,7 +21,7 @@ private:
     Property* voltage;
     Property* resistance;
 
-    std::unique_ptr<chowdsp::WDF::ResistiveVoltageSource<double>> resVs;
+    std::unique_ptr<chowdsp::wdf::ResistiveVoltageSource<double>> resVs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ResistiveVs)
 };

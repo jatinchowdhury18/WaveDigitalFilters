@@ -2,34 +2,34 @@
 #define RESISTIVEISCELL_H_INCLUDED
 
 #include "LeafCell.h"
-#include "SourceCell.h"
 #include "Leafs/ResistiveIs.h"
+#include "SourceCell.h"
 
 class ResistiveIsCell : public LeafCell,
                         public SourceCell
 {
 public:
-    ResistiveIsCell (ResistiveIs& node) :
-        LeafCell (node),
-        SourceCell (node),
-        node (node)
-    {}
-    virtual ~ResistiveIsCell() {}
-
-    void paint (Graphics& g) override
+    explicit ResistiveIsCell (ResistiveIs& node) : LeafCell (node),
+                                                   SourceCell (node),
+                                                   node (node)
     {
-        g.fillAll (Colours::white);
+    }
+    ~ResistiveIsCell() override = default;
 
-        g.setColour (Colours::black);
-        g.drawFittedText ("Is", getLocalBounds(), Justification::centred, 1);
+    void paint (juce::Graphics& g) override
+    {
+        g.fillAll (juce::Colours::white);
+
+        g.setColour (juce::Colours::black);
+        g.drawFittedText ("Is", getLocalBounds(), juce::Justification::centred, 1);
     }
 
-    void getPopupMenu (PopupMenu& p) override
+    void getPopupMenu (juce::PopupMenu& p) override
     {
         SourceCell::getPopupMenu (p);
         LeafCell::getPopupMenu (p);
     }
-    
+
 private:
     ResistiveIs& node;
 

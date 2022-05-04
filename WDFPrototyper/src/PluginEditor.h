@@ -3,27 +3,27 @@
 #include "PluginProcessor.h"
 #include "PropertiesComponent.h"
 
-class WdfprototyperAudioProcessorEditor : public AudioProcessorEditor,
-                                          private ChangeListener
+class WdfprototyperAudioProcessorEditor : public juce::AudioProcessorEditor,
+                                          private juce::ChangeListener
 {
 public:
-    WdfprototyperAudioProcessorEditor (WdfprototyperAudioProcessor&);
-    ~WdfprototyperAudioProcessorEditor();
+    explicit WdfprototyperAudioProcessorEditor (WdfprototyperAudioProcessor&);
+    ~WdfprototyperAudioProcessorEditor() override;
 
     void refresh (Node* node, int center = 0);
-    void paintConnectionTree (Node* node, Graphics& g);
+    void paintConnectionTree (Node* node, juce::Graphics& g);
 
-    void paint (Graphics&) override;
+    void paint (juce::Graphics&) override;
     void resized() override;
 
-    void changeListenerCallback (ChangeBroadcaster* source) override;
+    void changeListenerCallback (juce::ChangeBroadcaster* source) override;
 
 private:
     WdfprototyperAudioProcessor& proc;
 
     std::unique_ptr<PropertiesComponent> propsComp;
 
-    TooltipWindow tooltip { this, 500 };
+    juce::TooltipWindow tooltip { this, 500 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WdfprototyperAudioProcessorEditor)
 };

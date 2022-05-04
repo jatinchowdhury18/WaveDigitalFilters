@@ -53,7 +53,7 @@ bool ResistiveVs::prepare (double sampleRate)
     if (! Leaf::prepare (sampleRate))
         return false;
 
-    resVs = std::make_unique<chowdsp::WDF::ResistiveVoltageSource<double>> (resistance->value);
+    resVs = std::make_unique<chowdsp::wdf::ResistiveVoltageSource<double>> (resistance->value);
     wdf = resVs.get();
     setVoltage (voltage->value);
 

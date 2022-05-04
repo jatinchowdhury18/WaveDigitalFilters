@@ -19,7 +19,7 @@ public:
 private:
     Property* voltage;
 
-    std::unique_ptr<chowdsp::WDF::IdealVoltageSource<double>> idealVs;
+    std::unique_ptr<chowdsp::wdf::IdealVoltageSource<double>> idealVs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (IdealVs)
 };

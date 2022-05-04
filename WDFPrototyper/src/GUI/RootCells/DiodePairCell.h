@@ -7,18 +7,18 @@
 class DiodePairCell : public RootCell
 {
 public:
-    DiodePairCell (DiodePair& node) :
-        RootCell (node),
-        node (node)
-    {}
-    virtual ~DiodePairCell() {}
-
-    void paint (Graphics& g) override
+    explicit DiodePairCell (DiodePair& node) : RootCell (node),
+                                               node (node)
     {
-        g.fillAll (Colours::red);
+    }
+    ~DiodePairCell() override = default;
 
-        g.setColour (Colours::black);
-        g.drawFittedText ("DP", getLocalBounds(), Justification::centred, 1);
+    void paint (juce::Graphics& g) override
+    {
+        g.fillAll (juce::Colours::red);
+
+        g.setColour (juce::Colours::black);
+        g.drawFittedText ("DP", getLocalBounds(), juce::Justification::centred, 1);
     }
 
 private:
