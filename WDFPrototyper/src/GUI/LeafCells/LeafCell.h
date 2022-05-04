@@ -7,15 +7,15 @@
 class LeafCell : public Cell
 {
 public:
-    LeafCell (Leaf& node) :
-        Cell (node.getProps()),
-        node (node)
-    {}
+    explicit LeafCell (Leaf& node) : Cell (node.getProps()),
+                                     node (node)
+    {
+    }
     ~LeafCell() override = default;
 
-    void getPopupMenu (PopupMenu& p) override
+    void getPopupMenu (juce::PopupMenu& p) override
     {
-        PopupMenu m;
+        juce::PopupMenu m;
         m.addItem ("Resistor", [=]
                    { node.replaceNode (IDs::Leaf::Resistor); });
         m.addItem ("Inductor", [=]

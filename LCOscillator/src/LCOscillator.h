@@ -1,9 +1,10 @@
 #ifndef LCOSCILLATOR_H_INCLUDED
 #define LCOSCILLATOR_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <chowdsp_wdf/chowdsp_wdf.h>
+#include <juce_dsp/juce_dsp.h>
 
-using namespace chowdsp::WDFT;
+using namespace chowdsp::wdft;
 
 class LCOscillator
 {
@@ -25,7 +26,7 @@ public:
     void setCircuitParams (float freq, bool switchClosed)
     {
         const auto cap = 1.0e-6f;
-        const auto ind = 1.0f / (std::pow (MathConstants<float>::twoPi * freq, 2.0f) * cap);
+        const auto ind = 1.0f / (std::pow (juce::MathConstants<float>::twoPi * freq, 2.0f) * cap);
 
         C1.setCapacitanceValue (cap);
         I1.setInductanceValue (ind);

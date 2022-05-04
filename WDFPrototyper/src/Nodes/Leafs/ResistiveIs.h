@@ -21,7 +21,7 @@ private:
     Property* current;
     Property* resistance;
 
-    std::unique_ptr<chowdsp::WDF::ResistiveCurrentSource<double>> resIs;
+    std::unique_ptr<chowdsp::wdf::ResistiveCurrentSource<double>> resIs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ResistiveIs)
 };

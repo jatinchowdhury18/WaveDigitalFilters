@@ -1,12 +1,15 @@
 #ifndef NODE_H_INCLUDED
 #define NODE_H_INCLUDED
 
+#include <chowdsp_dsp/chowdsp_dsp.h>
+#include <chowdsp_wdf/chowdsp_wdf.h>
+
 #include "../MyDefs.h"
 #include "Cell.h"
 #include "Property.h"
 
-//using namespace chowdsp::WDF;
-using WDFNode = chowdsp::WDF::WDF<double>;
+//using namespace chowdsp::wdf;
+using WDFNode = chowdsp::wdf::WDF<double>;
 
 class Node
 {
@@ -37,7 +40,7 @@ public:
 
     WDFNode* getWDF() { return wdf; }
 
-    OwnedArray<Property>& getProps() { return props; }
+    juce::OwnedArray<Property>& getProps() { return props; }
 
 protected:
     Node* parent = nullptr;
@@ -47,7 +50,7 @@ protected:
 
     WDFNode* wdf = nullptr;
 
-    OwnedArray<Property> props;
+    juce::OwnedArray<Property> props;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Node)

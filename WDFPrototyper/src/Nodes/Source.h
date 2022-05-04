@@ -1,13 +1,13 @@
 #ifndef SOURCE_H_INCLUDED
 #define SOURCE_H_INCLUDED
 
-#include "JuceHeader.h"
+#include <juce_dsp/juce_dsp.h>
 
 class Source
 {
 public:
-    Source() {}
-    virtual ~Source() {}
+    Source() = default;
+    virtual ~Source() = default;
 
     void input (float sample)
     {

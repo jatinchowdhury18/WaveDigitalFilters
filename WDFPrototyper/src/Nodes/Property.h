@@ -1,11 +1,11 @@
 #ifndef PROPERTY_H_INCLUDED
 #define PROPERTY_H_INCLUDED
 
-#include "JuceHeader.h"
+#include <juce_dsp/juce_dsp.h>
 
 struct Property
 {
-    String name;
+    juce::String name;
     float value;
     float minValue;
     float maxValue;
@@ -16,7 +16,7 @@ struct Property
         if (newVal == value)
             return;
 
-        value = jlimit (minValue, maxValue, newVal);
+        value = juce::jlimit (minValue, maxValue, newVal);
         valueChanged();
     }
 };

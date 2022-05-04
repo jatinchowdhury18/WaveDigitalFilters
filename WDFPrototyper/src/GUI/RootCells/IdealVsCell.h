@@ -2,29 +2,29 @@
 #define IDEALVSCELL_H_INCLUDED
 
 #include "RootCell.h"
-#include "SourceCell.h"
 #include "Roots/IdealVs.h"
+#include "SourceCell.h"
 
 class IdealVsCell : public RootCell,
                     public SourceCell
 {
 public:
-    IdealVsCell (IdealVs& node) :
-        RootCell (node),
-        SourceCell (node),
-        node (node)
-    {}
-    virtual ~IdealVsCell() {}
-
-    void paint (Graphics& g) override
+    explicit IdealVsCell (IdealVs& node) : RootCell (node),
+                                           SourceCell (node),
+                                           node (node)
     {
-        g.fillAll (Colours::red);
-        
-        g.setColour (Colours::black);
-        g.drawFittedText ("Vs", getLocalBounds(), Justification::centred, 1);
+    }
+    ~IdealVsCell() override = default;
+
+    void paint (juce::Graphics& g) override
+    {
+        g.fillAll (juce::Colours::red);
+
+        g.setColour (juce::Colours::black);
+        g.drawFittedText ("Vs", getLocalBounds(), juce::Justification::centred, 1);
     }
 
-    void getPopupMenu (PopupMenu& p) override
+    void getPopupMenu (juce::PopupMenu& p) override
     {
         SourceCell::getPopupMenu (p);
         RootCell::getPopupMenu (p);

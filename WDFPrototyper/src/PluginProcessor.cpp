@@ -15,7 +15,7 @@ WdfprototyperAudioProcessor::~WdfprototyperAudioProcessor()
 
 void WdfprototyperAudioProcessor::unprepare()
 {
-    SpinLock::ScopedLockType sl { renderingLock };
+    juce::SpinLock::ScopedLockType sl { renderingLock };
     isPrepared = false;
 }
 
@@ -173,9 +173,9 @@ void WdfprototyperAudioProcessor::releaseResources()
 {
 }
 
-void WdfprototyperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
+void WdfprototyperAudioProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
 {
-    SpinLock::ScopedTryLockType stl { renderingLock };
+    juce::SpinLock::ScopedTryLockType stl { renderingLock };
     if (! isPrepared || probeNode == nullptr || ! stl.isLocked())
     {
         buffer.clear();
@@ -214,13 +214,13 @@ void WdfprototyperAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
         buffer.copyFrom (1 - channelIndex, 0, buffer, channelIndex, 0, buffer.getNumSamples());
 }
 
-AudioProcessorEditor* WdfprototyperAudioProcessor::createEditor()
+juce::AudioProcessorEditor* WdfprototyperAudioProcessor::createEditor()
 {
     return new WdfprototyperAudioProcessorEditor (*this);
 }
 
 // This creates new instances of the plugin..
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new WdfprototyperAudioProcessor();
 }

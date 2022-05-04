@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
+
 #include "BaxandallWDF.h"
 #include "BaxandallWDFAdapt.h"
 
@@ -12,24 +14,24 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processAudioBlock (AudioBuffer<float>&) override;
+    void processAudioBlock (juce::AudioBuffer<float>&) override;
 
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
 private:
     std::atomic<float>* bassParam = nullptr;
     std::atomic<float>* trebleParam = nullptr;
     std::atomic<float>* wdfParam = nullptr;
 
-    SmoothedValue<float, ValueSmoothingTypes::Linear> bassSmooth[2];
-    SmoothedValue<float, ValueSmoothingTypes::Linear> trebleSmooth[2];
+    juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> bassSmooth[2];
+    juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> trebleSmooth[2];
 
     BaxandallWDF wdfUnadapted[2];
     BaxandallWDFAdapt wdfAdapted[2];
 
     int prevWDF = 0;
 
-    dsp::Oversampling<float> oversampling { 2, 1, dsp::Oversampling<float>::filterHalfBandPolyphaseIIR };
+    juce::dsp::Oversampling<float> oversampling { 2, 1, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BaxandallEqAudioProcessor)
 };

@@ -14,7 +14,6 @@ function(create_wdf_plugin plugin_name plugin_code)
         MICROPHONE_PERMISSION_ENABLED TRUE
     )
 
-    juce_generate_juce_header(${plugin_name})
     target_compile_definitions(${plugin_name} PUBLIC
         JUCE_VST3_CAN_REPLACE_VST2=0
         JUCE_DISPLAY_SPLASH_SCREEN=0
@@ -28,11 +27,10 @@ function(create_wdf_plugin plugin_name plugin_code)
 
     target_link_libraries(${plugin_name} PRIVATE
         PRIVATE
-            juce::juce_audio_utils
-            juce::juce_audio_plugin_client
             juce::juce_dsp
             chowdsp_dsp
             chowdsp_plugin_utils
+            chowdsp_wdf
         PUBLIC
             juce::juce_recommended_config_flags
             juce::juce_recommended_lto_flags

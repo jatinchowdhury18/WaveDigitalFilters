@@ -1,5 +1,8 @@
 #pragma once
 
+#include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
+#include <juce_dsp/juce_dsp.h>
+
 #include "PulseShaper.h"
 
 class PulseShaperAudioProcessor : public chowdsp::PluginBase<PulseShaperAudioProcessor>
@@ -11,14 +14,14 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-    void processAudioBlock (AudioBuffer<float>&) override;
+    void processAudioBlock (juce::AudioBuffer<float>&) override;
 
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
 private:
     PulseShaper shaper[2];
 
-    dsp::Oversampling<float> oversampling { 2, 1, dsp::Oversampling<float>::filterHalfBandPolyphaseIIR };
+    juce::dsp::Oversampling<float> oversampling { 2, 1, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PulseShaperAudioProcessor)
 };

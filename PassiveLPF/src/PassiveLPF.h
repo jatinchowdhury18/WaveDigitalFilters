@@ -1,9 +1,10 @@
 #ifndef PASSIVELPF_H_INCLUDED
 #define PASSIVELPF_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <chowdsp_wdf/chowdsp_wdf.h>
+#include <juce_dsp/juce_dsp.h>
 
-using namespace chowdsp::WDFT;
+using namespace chowdsp::wdft;
 
 class PassiveLPF
 {
@@ -25,7 +26,7 @@ public:
     void setCutoffFrequency (float cutoff)
     {
         const auto Cap = 5.0e-8f;
-        const auto Res = 1.0f / (MathConstants<float>::twoPi * cutoff * Cap);
+        const auto Res = 1.0f / (juce::MathConstants<float>::twoPi * cutoff * Cap);
 
         R1.setResistanceValue (Res);
         R2.setResistanceValue (Res);

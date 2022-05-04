@@ -7,14 +7,14 @@
 class SourceCell
 {
 public:
-    SourceCell (Source& source) :
-        source (source)
-    {}
-    ~SourceCell() {}
-
-    void getPopupMenu (PopupMenu& p)
+    explicit SourceCell (Source& source) : source (source)
     {
-        p.addItem ("Input", true, source.getInput(), [=] { source.setInput (true); });
+    }
+
+    void getPopupMenu (juce::PopupMenu& p)
+    {
+        p.addItem ("Input", true, source.getInput(), [=]
+                   { source.setInput (true); });
     }
 
 private:

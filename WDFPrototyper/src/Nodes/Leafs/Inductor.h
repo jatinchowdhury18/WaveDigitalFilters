@@ -14,7 +14,7 @@ public:
 private:
     Property* inductance;
 
-    std::unique_ptr<chowdsp::WDF::Inductor<double>> ind;
+    std::unique_ptr<chowdsp::wdf::Inductor<double>> ind;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Inductor)
 };

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <JuceHeader.h>
+#include <chowdsp_dsp/chowdsp_dsp.h>
+#include <chowdsp_wdf/chowdsp_wdf.h>
 
-namespace wdft = chowdsp::WDFT;
+namespace wdft = chowdsp::wdft;
 
 class SallenKeyLPF
 {

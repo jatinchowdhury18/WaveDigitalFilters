@@ -16,7 +16,7 @@ private:
     Property* vt; // thermal voltage
     Property* numDiodes; // number of diodes
 
-    std::unique_ptr<chowdsp::WDF::Diode<double>> diode;
+    std::unique_ptr<chowdsp::wdf::Diode<double>> diode;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Diode)
 };

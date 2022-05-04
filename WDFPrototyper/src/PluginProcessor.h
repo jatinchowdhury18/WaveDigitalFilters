@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
+
 #include "Leafs/Leaf.h"
 #include "Roots/RootNode.h"
 #include "Source.h"
@@ -18,9 +20,9 @@ public:
 
     void releaseResources() override;
 
-    void processAudioBlock (AudioBuffer<float>&) override;
+    void processAudioBlock (juce::AudioBuffer<float>&) override;
 
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
 
     void addNode (Node* node, Node* newNode) override;
 
@@ -42,7 +44,7 @@ private:
     Source* inputNode = nullptr;
     Leaf* probeNode = nullptr;
 
-    SpinLock renderingLock;
+    juce::SpinLock renderingLock;
     std::atomic_bool isPrepared { false };
 
     bool isDeleting = false;

@@ -1,9 +1,10 @@
 #ifndef DIODECLIPPER_H_INCLUDED
 #define DIODECLIPPER_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <chowdsp_wdf/chowdsp_wdf.h>
+#include <juce_dsp/juce_dsp.h>
 
-using namespace chowdsp::WDFT;
+using namespace chowdsp::wdft;
 
 class DiodeClipper
 {
@@ -23,7 +24,7 @@ public:
     void setCircuitParams (float cutoff)
     {
         constexpr auto Cap = 47.0e-9f;
-        const auto Res = 1.0f / (MathConstants<float>::twoPi * cutoff * Cap);
+        const auto Res = 1.0f / (juce::MathConstants<float>::twoPi * cutoff * Cap);
 
         C1.setCapacitanceValue (Cap);
         R1.setResistanceValue (Res);

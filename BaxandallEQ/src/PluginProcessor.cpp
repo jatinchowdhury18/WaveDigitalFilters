@@ -5,7 +5,7 @@ namespace
 float skewParam (float val)
 {
     val = std::pow (val, 3.333f);
-    return jlimit (0.01f, 0.99f, 1.0f - val);
+    return juce::jlimit (0.01f, 0.99f, 1.0f - val);
 }
 } // namespace
 
@@ -20,9 +20,9 @@ void BaxandallEqAudioProcessor::addParameters (Parameters& params)
 {
     using namespace chowdsp::ParamUtils;
 
-    params.push_back (std::make_unique<VTSParam> ("bass", "Bass", String(), NormalisableRange { 0.0f, 1.0f }, 0.5f, &percentValToString, &stringToPercentVal));
-    params.push_back (std::make_unique<VTSParam> ("treble", "Treble", String(), NormalisableRange { 0.0f, 1.0f }, 0.5f, &percentValToString, &stringToPercentVal));
-    params.push_back (std::make_unique<AudioParameterChoice> ("wdf_choice", "WDF", StringArray { "Unadapted R-Type", "Adapted R-Type" }, 0));
+    params.push_back (std::make_unique<VTSParam> ("bass", "Bass", juce::String(), juce::NormalisableRange { 0.0f, 1.0f }, 0.5f, &percentValToString, &stringToPercentVal));
+    params.push_back (std::make_unique<VTSParam> ("treble", "Treble", juce::String(), juce::NormalisableRange { 0.0f, 1.0f }, 0.5f, &percentValToString, &stringToPercentVal));
+    params.push_back (std::make_unique<juce::AudioParameterChoice> ("wdf_choice", "WDF", juce::StringArray { "Unadapted R-Type", "Adapted R-Type" }, 0));
 }
 
 void BaxandallEqAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -31,7 +31,7 @@ void BaxandallEqAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 
     prevWDF = (int) *wdfParam;
 
-    const auto osSampleRate = sampleRate * oversampling.getOversamplingFactor();
+    const auto osSampleRate = sampleRate * (double) oversampling.getOversamplingFactor();
     for (int ch = 0; ch < 2; ++ch)
     {
         wdfUnadapted[ch].prepare (osSampleRate);
@@ -50,7 +50,7 @@ void BaxandallEqAudioProcessor::releaseResources()
     oversampling.reset();
 }
 
-void BaxandallEqAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
+void BaxandallEqAudioProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
 {
     int wdfType = (int) *wdfParam;
     if (wdfType != prevWDF)
@@ -83,10 +83,8 @@ void BaxandallEqAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
         }
     };
 
-    dsp::AudioBlock<float> block (buffer);
-    dsp::AudioBlock<float> osBlock (buffer);
-
-    osBlock = oversampling.processSamplesUp (block);
+    juce::dsp::AudioBlock<float> block (buffer);
+    auto&& osBlock = oversampling.processSamplesUp (block);
 
     const int numSamples = (int) osBlock.getNumSamples();
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
@@ -103,16 +101,16 @@ void BaxandallEqAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
 
     oversampling.processSamplesDown (block);
 
-    buffer.applyGain (Decibels::decibelsToGain (21.0f));
+    buffer.applyGain (juce::Decibels::decibelsToGain (21.0f));
 }
 
-AudioProcessorEditor* BaxandallEqAudioProcessor::createEditor()
+juce::AudioProcessorEditor* BaxandallEqAudioProcessor::createEditor()
 {
-    return new GenericAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 // This creates new instances of the plugin..
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new BaxandallEqAudioProcessor();
 }

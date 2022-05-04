@@ -2,29 +2,29 @@
 #define IDEALISCELL_H_INCLUDED
 
 #include "RootCell.h"
-#include "SourceCell.h"
 #include "Roots/IdealIs.h"
+#include "SourceCell.h"
 
 class IdealIsCell : public RootCell,
                     public SourceCell
 {
 public:
-    IdealIsCell (IdealIs& node) :
-        RootCell (node),
-        SourceCell (node),
-        node (node)
-    {}
-    virtual ~IdealIsCell() {}
-
-    void paint (Graphics& g) override
+    explicit IdealIsCell (IdealIs& node) : RootCell (node),
+                                           SourceCell (node),
+                                           node (node)
     {
-        g.fillAll (Colours::red);
+    }
+    ~IdealIsCell() override = default;
 
-        g.setColour (Colours::black);
-        g.drawFittedText ("Is", getLocalBounds(), Justification::centred, 1);
+    void paint (juce::Graphics& g) override
+    {
+        g.fillAll (juce::Colours::red);
+
+        g.setColour (juce::Colours::black);
+        g.drawFittedText ("Is", getLocalBounds(), juce::Justification::centred, 1);
     }
 
-    void getPopupMenu (PopupMenu& p) override
+    void getPopupMenu (juce::PopupMenu& p) override
     {
         SourceCell::getPopupMenu (p);
         RootCell::getPopupMenu (p);

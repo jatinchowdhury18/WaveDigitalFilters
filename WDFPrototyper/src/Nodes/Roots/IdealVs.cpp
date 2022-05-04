@@ -44,7 +44,7 @@ bool IdealVs::prepare (double sampleRate)
     if (! RootNode::prepare (sampleRate))
         return false;
 
-    idealVs = std::make_unique<chowdsp::WDF::IdealVoltageSource<double>> (child->getWDF());
+    idealVs = std::make_unique<chowdsp::wdf::IdealVoltageSource<double>> (child->getWDF());
     wdf = idealVs.get();
     setVoltage (voltage->value);
 

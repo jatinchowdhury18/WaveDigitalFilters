@@ -7,18 +7,18 @@
 class InductorCell : public LeafCell
 {
 public:
-    InductorCell (Inductor& node) :
-        LeafCell (node),
-        node (node)
-    {}
-    virtual ~InductorCell() {}
-
-    void paint (Graphics& g) override
+    explicit InductorCell (Inductor& node) : LeafCell (node),
+                                             node (node)
     {
-        g.fillAll (node.getProbe() ? Colours::greenyellow : Colours::white);
+    }
+    ~InductorCell() override = default;
 
-        g.setColour (Colours::black);
-        g.drawFittedText ("Ind", getLocalBounds(), Justification::centred, 1);
+    void paint (juce::Graphics& g) override
+    {
+        g.fillAll (node.getProbe() ? juce::Colours::greenyellow : juce::Colours::white);
+
+        g.setColour (juce::Colours::black);
+        g.drawFittedText ("Ind", getLocalBounds(), juce::Justification::centred, 1);
     }
 
 private:

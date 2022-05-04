@@ -18,7 +18,7 @@ bool Resistor::prepare (double sampleRate)
     if (! Leaf::prepare (sampleRate))
         return false;
 
-    res = std::make_unique<chowdsp::WDF::Resistor<double>> (resistor->value);
+    res = std::make_unique<chowdsp::wdf::Resistor<double>> (resistor->value);
     wdf = res.get();
 
     return true;

@@ -12,7 +12,7 @@ public:
     bool prepare (double sampleRate) override;
 
 private:
-    std::unique_ptr<chowdsp::WDF::WDFSeries<double>> series;
+    std::unique_ptr<chowdsp::wdf::WDFSeries<double>> series;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Series)
 };

@@ -34,6 +34,8 @@ bool Diode::prepare (double sampleRate)
     if (! RootNode::prepare (sampleRate))
         return false;
 
-    diode = std::make_unique<chowdsp::WDF::Diode<double>> (child->getWDF(), (double) Is->value, (double) vt->value, (double) numDiodes->value);
+    diode = std::make_unique<chowdsp::wdf::Diode<double>> (child->getWDF(), (double) Is->value, (double) vt->value, (double) numDiodes->value);
     wdf = diode.get();
+
+    return true;
 }

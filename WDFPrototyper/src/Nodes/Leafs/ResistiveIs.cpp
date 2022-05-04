@@ -53,7 +53,7 @@ bool ResistiveIs::prepare (double sampleRate)
     if (! Leaf::prepare (sampleRate))
         return false;
 
-    resIs = std::make_unique<chowdsp::WDF::ResistiveCurrentSource<double>> (resistance->value);
+    resIs = std::make_unique<chowdsp::wdf::ResistiveCurrentSource<double>> (resistance->value);
     wdf = resIs.get();
     setCurrent (current->value);
 

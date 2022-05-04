@@ -1,8 +1,10 @@
 #pragma once
 
-#include <JuceHeader.h>
+#include <chowdsp_dsp/chowdsp_dsp.h>
 
-namespace wdft = chowdsp::WDFT;
+#include <chowdsp_wdf/chowdsp_wdf.h>
+
+namespace wdft = chowdsp::wdft;
 
 /**
  * Implentation based on Werner et. al:
