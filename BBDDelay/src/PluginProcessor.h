@@ -1,5 +1,6 @@
 #pragma once
 
+#include <variant>
 #include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
 #include <juce_dsp/juce_dsp.h>
 
