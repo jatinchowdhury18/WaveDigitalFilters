@@ -88,7 +88,7 @@ private:
     };
 
     using RType = wdft::RootRtypeAdaptor<float, ImpedanceCalc, decltype (S4), decltype (P1), decltype (Resc), decltype (S3), decltype (S2), decltype (S1)>;
-    RType R { std::tie (S4, P1, Resc, S3, S2, S1) };
+    RType R { S4, P1, Resc, S3, S2, S1 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BaxandallWDF)
 };

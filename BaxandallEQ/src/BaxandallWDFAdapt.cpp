@@ -20,9 +20,16 @@ void BaxandallWDFAdapt::reset()
 
 void BaxandallWDFAdapt::setParams (float bassParam, float trebleParam)
 {
-    Pb_plus.setResistanceValue (Pb * bassParam);
-    Pb_minus.setResistanceValue (Pb * (1.0f - bassParam));
+    {
+        chowdsp::wdft::ScopedDeferImpedancePropagation deferImpedance { P1, S2, S3, S4 };
 
-    Pt_plus.setResistanceValue (Pt * trebleParam);
-    Pt_minus.setResistanceValue (Pt * (1.0f - trebleParam));
+        Pb_plus.setResistanceValue (Pb * bassParam);
+        Pb_minus.setResistanceValue (Pb * (1.0f - bassParam));
+
+        Pt_plus.setResistanceValue (Pt * trebleParam);
+        Pt_minus.setResistanceValue (Pt * (1.0f - trebleParam));
+    }
+
+    // propagate impedance change through R-type adaptor
+    R.propagateImpedanceChange();
 }
