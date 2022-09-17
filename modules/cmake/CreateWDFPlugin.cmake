@@ -27,9 +27,9 @@ function(create_wdf_plugin plugin_name plugin_code)
 
     target_link_libraries(${plugin_name} PRIVATE
         PRIVATE
+            juce::juce_audio_utils
             juce::juce_dsp
-            chowdsp_dsp
-            chowdsp_plugin_utils
+            chowdsp::chowdsp_plugin_base
             chowdsp_wdf
         PUBLIC
             juce::juce_recommended_config_flags

@@ -1,7 +1,7 @@
 #ifndef NODE_H_INCLUDED
 #define NODE_H_INCLUDED
 
-#include <chowdsp_dsp/chowdsp_dsp.h>
+#include <chowdsp_core/chowdsp_core.h>
 #include <chowdsp_wdf/chowdsp_wdf.h>
 
 #include "../MyDefs.h"

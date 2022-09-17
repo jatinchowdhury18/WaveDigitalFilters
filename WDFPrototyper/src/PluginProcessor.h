@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
+#include <chowdsp_plugin_base/chowdsp_plugin_base.h>
 
 #include "Leafs/Leaf.h"
 #include "Roots/RootNode.h"
@@ -12,7 +12,7 @@ class WdfprototyperAudioProcessor : public chowdsp::PluginBase<WdfprototyperAudi
 public:
     WdfprototyperAudioProcessor();
 
-    ~WdfprototyperAudioProcessor();
+    ~WdfprototyperAudioProcessor() override;
 
     static void addParameters (Parameters&) {}
 

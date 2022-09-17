@@ -1,6 +1,7 @@
 #pragma once
 
-#include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
+#include <chowdsp_plugin_base/chowdsp_plugin_base.h>
+#include <juce_dsp/juce_dsp.h>
 
 #include "BaxandallWDF.h"
 #include "BaxandallWDFAdapt.h"

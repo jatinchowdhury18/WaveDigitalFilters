@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chowdsp_dsp/chowdsp_dsp.h>
+#include <chowdsp_simd/chowdsp_simd.h>
 #include <chowdsp_wdf/chowdsp_wdf.h>
 
 namespace wdft = chowdsp::wdft;
@@ -91,7 +91,7 @@ private:
     };
 
     using RType = wdft::RootRtypeAdaptor<float, ImpedanceCalc, decltype (S1), decltype (R197), decltype (C58), decltype (C59), decltype (R196)>;
-    RType R { std::tie (S1, R197, C58, C59, R196) };
+    RType R { S1, R197, C58, C59, R196 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HatResonatorWDF)
 };

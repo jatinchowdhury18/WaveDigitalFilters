@@ -81,7 +81,7 @@ void BBDDelayAudioProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer
     mixer.pushDrySamples (block);
 
     inputFilter.setCutoffFrequency (*inputFilterFreqParam);
-    inputFilter.process (juce::dsp::ProcessContextReplacing<float> { block });
+    inputFilter.processBlock (block);
 
     auto&& osBlock = oversampling.processSamplesUp (block);
     const auto osNumSamples = (int) osBlock.getNumSamples();
@@ -111,7 +111,7 @@ void BBDDelayAudioProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer
     oversampling.processSamplesDown (block);
 
     outputFilter.setCutoffFrequency (*outputFilterFreqParam);
-    outputFilter.process (juce::dsp::ProcessContextReplacing<float> { block });
+    outputFilter.processBlock (block);
 
     mixer.mixWetSamples (block);
 
