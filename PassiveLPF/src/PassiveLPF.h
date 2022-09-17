@@ -2,7 +2,6 @@
 #define PASSIVELPF_H_INCLUDED
 
 #include <chowdsp_wdf/chowdsp_wdf.h>
-#include <juce_dsp/juce_dsp.h>
 
 using namespace chowdsp::wdft;
 

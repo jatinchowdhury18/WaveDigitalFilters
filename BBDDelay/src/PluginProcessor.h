@@ -1,8 +1,10 @@
 #pragma once
 
-#include <variant>
-#include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
+#include <chowdsp_filters/chowdsp_filters.h>
+#include <chowdsp_plugin_base/chowdsp_plugin_base.h>
+#include <chowdsp_sources/chowdsp_sources.h>
 #include <juce_dsp/juce_dsp.h>
+#include <variant>
 
 #include "BucketBrigadeWDF.h"
 

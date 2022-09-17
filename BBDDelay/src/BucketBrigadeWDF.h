@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chowdsp_dsp/chowdsp_dsp.h>
+#include <chowdsp_simd/chowdsp_simd.h>
 #include <chowdsp_wdf/chowdsp_wdf.h>
 
 namespace wdft = chowdsp::wdft;
@@ -8,7 +8,7 @@ namespace wdft = chowdsp::wdft;
 template <typename T>
 struct Bucket
 {
-    using NumericType = wdft::NumericType<T>;
+    using NumericType = chowdsp::NumericType<T>;
 
     wdft::CapacitorT<T> Cap { (T) (NumericType) 1.0e-7 };
     wdft::ResistiveVoltageSourceT<T> Vin { (T) (NumericType) 100.0 };
@@ -106,7 +106,7 @@ struct BBD
         const auto clockSwitchState = clockInput > (T) 0;
 
         for (size_t i = 1; i < Vec::size; ++i)
-            dataRegister[i] = dataRegister[i-1];
+            dataRegister[i] = dataRegister[i - 1];
         dataRegister[0] = x;
 
         auto simdRegister = xsimd::load_aligned (dataRegister);

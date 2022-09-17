@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chowdsp_dsp/chowdsp_dsp.h>
+#include <chowdsp_simd/chowdsp_simd.h>
 
 #include <chowdsp_wdf/chowdsp_wdf.h>
 

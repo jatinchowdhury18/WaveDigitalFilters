@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chowdsp_dsp/chowdsp_dsp.h>
+#include <chowdsp_simd/chowdsp_simd.h>
 #include <chowdsp_wdf/chowdsp_wdf.h>
 
 namespace wdft = chowdsp::wdft;
@@ -64,7 +64,7 @@ private:
     };
 
     using RType = wdft::RtypeAdaptor<float, 0, ImpedanceCalc, decltype (C1), decltype (R2), decltype (C2)>;
-    RType R { std::tie (C1, R2, C2) };
+    RType R { C1, R2, C2 };
 
     // Port A
     wdft::ResistorT<float> R1 { 1.0e6f };
